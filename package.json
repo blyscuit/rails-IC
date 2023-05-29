@@ -1,0 +1,25 @@
+{
+  "name": "google_search_ruby",
+  "private": "true",
+  "dependencies": {
+    "esbuild": "0.17.19",
+    "i18n-js": "3.8.0",
+    "sass": "1.62.1"
+  },
+  "devDependencies": {
+    "@nimblehq/eslint-config-nimble": "2.2.1",
+    "@nimblehq/stylelint-config-nimble": "1.0.2",
+    "postcss": "8.4.5",
+    "stylelint": "15.6.2"
+  },
+  "scripts": {
+    "eslint": "eslint . --color",
+    "eslint:fix": "eslint . --color --fix",
+    "stylelint": "stylelint **/*.scss --color",
+    "stylelint:fix": "stylelint **/*.scss --color --fix",
+    "codebase": "yarn eslint && yarn stylelint",
+    "codebase:fix": "yarn eslint:fix && yarn stylelint:fix",
+    "build": "node app/javascript/build.js",
+    "build:css": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --no-source-map --load-path=node_modules"
+  }
+}
