@@ -15,7 +15,7 @@ console_command = "/rails/bin/rails console"
   min_machines_running = 0
 
 [env]
-  DEPLOYED_HOST = "rails-example-production.fly.dev"
+  DEPLOYED_HOST = "rails-ic.fly.dev"
   RAILS_ENV = "production"
   MAILER_DEFAULT_HOST = "localhost"
   MAILER_DEFAULT_PORT = "3000"
