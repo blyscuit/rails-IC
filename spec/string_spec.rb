@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-describe "String" do
-  context "Init" do
-    it "has value" do
-      expect("").to eq("")
+RSpec.describe 'String' do
+  context 'when converting to integer' do
+    it 'has correct value' do
+      expect('100'.to_i).to eq(100)
     end
   end
 end
