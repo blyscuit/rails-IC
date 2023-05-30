@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for sparkling-voice-9562 on 2023-05-18T17:28:53+07:00
+# fly.toml app configuration file generated for rails-ic-staging on 2023-05-30T13:04:02+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "sparkling-voice-9562"
-primary_region = "hkg"
+app = "rails-ic-staging"
+primary_region = "sin"
 console_command = "/rails/bin/rails console"
 
 [http_service]
@@ -15,4 +15,4 @@ console_command = "/rails/bin/rails console"
   min_machines_running = 0
   
 [env]
-  DEPLOYED_HOST = "sparkling-voice-9562.fly.dev"
+  DEPLOYED_HOST = "rails-ic-staging.fly.dev"

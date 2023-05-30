@@ -45,5 +45,7 @@ module GoogleSearchRuby
 
     # Compress the responses to reduce the size of html/json controller responses.
     config.middleware.use Rack::Deflater
+
+    config.hosts << ENV["DEPLOYED_HOST"]
   end
 end

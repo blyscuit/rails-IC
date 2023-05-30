@@ -37,6 +37,9 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch || github.ref }}
 
+      - name: Prepare Docker image
+        run: bin/docker-prepare
+
       - name: Install Fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
 
