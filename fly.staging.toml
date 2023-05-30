@@ -1,0 +1,18 @@
+# fly.toml app configuration file generated for sparkling-voice-9562 on 2023-05-18T17:28:53+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "sparkling-voice-9562"
+primary_region = "hkg"
+console_command = "/rails/bin/rails console"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  
+[env]
+  DEPLOYED_HOST = "sparkling-voice-9562.fly.dev"
