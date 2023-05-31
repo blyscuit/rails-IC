@@ -2,6 +2,6 @@
 
 class PublicController < ApplicationController
   def index
-    render json: "Nice to meet you"
+    render json: 'Nice to meet you'
   end
 end
