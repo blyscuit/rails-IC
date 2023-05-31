@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class Keyword 
+class Keyword
   attr_accessor :id, :name
 end
