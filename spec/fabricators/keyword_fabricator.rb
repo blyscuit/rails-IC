@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 Fabricator(:keyword) do
-  name FFaker::FreedomIpsum.word
+  on_init { init_with(FFaker::Identification.ssn, FFaker::FreedomIpsum.word) }
 end

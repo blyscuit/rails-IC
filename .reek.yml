@@ -10,6 +10,10 @@ detectors:
   DataClump:
     max_copies: 3
     min_clump_size: 3
+  
+  UncommunicativeModuleName:
+    accept:
+      - V1
 
 ### Directory specific configuration
 directories:
