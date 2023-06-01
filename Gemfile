@@ -21,6 +21,7 @@ gem 'jsonapi-serializer' # JSON: API serializer for Ruby
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'doorkeeper' # OAuth 2 provider functionality to Ruby on Rails
 
 # Translations
 # gem 'devise-i18n' # Translations for Devise
