@@ -1,34 +1,9 @@
-# Git Repository Template
+[![Build Status](CI_BADGE_URL goes here)](REPO_URL goes here)
 
-Project repository template to set up all public projects at [Nimble](https://nimblehq.co/)
+## Introduction
 
-## Usage
+> *App introduction goes here ...*
 
-Clone the repository
+## Documentation
 
-`git clone git@github.com:nimblehq/git-template.git`
-
-## License
-
-This project is Copyright (c) 2014 and onwards Nimble. It is free software and may be redistributed under the terms specified in the [LICENSE] file.
-
-[LICENSE]: /LICENSE
-
-## About
-<a href="https://nimblehq.co/">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://assets.nimblehq.co/logo/dark/logo-dark-text-160.png">
-    <img alt="Nimble logo" src="https://assets.nimblehq.co/logo/light/logo-light-text-160.png">
-  </picture>
-</a>
-
-This project is maintained and funded by Nimble.
-
-We ❤️ open source and do our part in sharing our work with the community!
-See [our other projects][community] or [hire our team][hire] to help build your product.
-
-Want to join? [Check out our Jobs][jobs]!
-
-[community]: https://github.com/nimblehq
-[hire]: https://nimblehq.co/
-[jobs]: https://jobs.nimblehq.co/
+Please check out full documentation on the [wiki](../../wiki).
