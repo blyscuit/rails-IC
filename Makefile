@@ -16,7 +16,6 @@ env/teardown:  # this command will delete data
 
 install-dependencies:
 	bundle install
-	yarn install
 
 codebase:
 	rubocop
