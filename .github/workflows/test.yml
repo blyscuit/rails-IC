@@ -98,7 +98,9 @@ jobs:
         run: docker-compose pull test || true
 
       - name: Run unit tests
-        run: docker-compose run test bundle exec rspec --exclude-pattern "spec/codebase/**/*_spec.rb" --profile --format progress
+        run: |
+          docker-compose run test bundle exec rake db:test:prepare
+          docker-compose run test bundle exec rspec --exclude-pattern "spec/codebase/**/*_spec.rb" --profile --format progress
 
       - name: Upload tests coverage artifact
         uses: actions/upload-artifact@v3
