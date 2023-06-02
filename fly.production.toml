@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for rails-ic on 2023-05-30T14:19:06+07:00
+# fly.toml app configuration file generated for search-rails-ic on 2023-06-02T12:03:47+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "rails-ic"
-primary_region = "sin"
+app = "search-rails-ic"
+primary_region = "hkg"
 console_command = "/rails/bin/rails console"
 
 [http_service]
@@ -13,6 +13,7 @@ console_command = "/rails/bin/rails console"
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
+
 
 [env]
   DEPLOYED_HOST = "rails-ic.fly.dev"
