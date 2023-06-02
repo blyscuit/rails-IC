@@ -2,6 +2,8 @@
 
 Doorkeeper.configure do
   orm :active_record
+  api_only
+  base_controller 'ActionController::API'
 
   api_only
 
