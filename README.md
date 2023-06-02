@@ -1,7 +1,7 @@
 # Google Search Ruby
 
-- Staging URL: https://rails-ic-staging.fly.dev/
-- Production URL: https://rails-ic.fly.dev/
+- Staging URL: https://search-rails-ic-staging.fly.dev/
+- Production URL: https://search-rails-ic.fly.dev/
 
 [![Build Status](https://github.com/blyscuit/docs/actions/workflows/deploy_fly.yml/badge.svg)](https://github.com/blyscuit/rails-ic/tree/chore/3-deployment-automation)
 
