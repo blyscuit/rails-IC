@@ -40,7 +40,7 @@ jobs:
       - name: Prepare Docker image
         run: bin/docker-prepare
 
-      - name: Install Fly.io
+      - name: Install FlyCTL
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy to Fly.io
