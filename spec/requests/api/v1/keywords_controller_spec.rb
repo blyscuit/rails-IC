@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
-RSpec.describe Api::V1::KeywordsController, type: :controller do
+RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'GET#index' do
-    it 'returns the success status' do
-      get :index
+    it 'returns success status' do
+      get '/api/v1/keywords'
 
       expect(response).to have_http_status(:success)
     end
 
-    it 'returns the valid keywords' do
-      get :index
+    it 'responds the valid keywords' do
+      get '/api/v1/keywords'
+
       keywords = JSON.parse(response.body, symbolize_names: true)[:data]
 
       expect(keywords[0][:attributes][:name]).to eq('First keyword')

@@ -71,4 +71,6 @@ Rails.application.configure do
     Bullet.raise                       = true
     Bullet.unused_eager_loading_enable = false
   end
+
+  config.hosts << "www.example.com"
 end
