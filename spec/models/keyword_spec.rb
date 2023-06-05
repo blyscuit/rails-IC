@@ -3,11 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Keyword, type: :model do
-  describe 'Init' do
-    let(:keyword) { Fabricate(:keyword) }
+  it 'exposes its name' do
+    keyword = described_class.new(1, 'A keyword name')
 
-    it 'has name' do
-      expect(keyword.name).not_to be_nil
-    end
+    expect(keyword.name).to eq('A keyword name')
   end
 end

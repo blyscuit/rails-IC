@@ -4,7 +4,9 @@ module Api
   module V1
     class KeywordsController < ApplicationController
       def index
-        render json: KeywordSerializer.new(Keyword.new(1, 'Hello')).serializable_hash.to_json
+        keywords = [Keyword.new(1, 'First keyword'), Keyword.new(1, 'Second keyword')]
+
+        render json: KeywordSerializer.new(keywords).serializable_hash.to_json
       end
     end
   end
