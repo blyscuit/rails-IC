@@ -13,5 +13,5 @@
 Run the Rails app:
 
 ```sh
-bundle exec make dev
+make dev
 ``
