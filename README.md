@@ -18,7 +18,7 @@ Web Search Data Fetcher for Rails Internal Certificate.
 ### Use Script
 
 ```sh
-bundle exec make dev
+make dev
 ```
 
 ## Documentation
