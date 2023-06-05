@@ -2,23 +2,22 @@
 
 require 'rails_helper'
 
-RSpec.describe PrivateController, type: :controller do
+RSpec.describe PrivateController, type: :request do
   describe 'GET#index' do
     context 'when user is not sign in' do
-      it 'returns redirect status' do
-        get :index
+      it 'redirects to the new user session page' do
+        get '/private'
 
         expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 
     context 'when user is sign in' do
-      before(:each) do
+      it 'returns success status' do
         sign_in Fabricate(:user)
-      end
 
-      it 'returns expected status' do
-        get :index
+        get '/private'
 
         expect(response).to have_http_status(:success)
       end
