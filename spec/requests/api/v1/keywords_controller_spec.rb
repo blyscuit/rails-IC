@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::KeywordsController, type: :controller do
   describe 'GET#index' do
-    it 'returns expected status' do
+    it 'returns the success status' do
       get :index
 
       expect(response).to have_http_status(:success)
     end
 
-    it 'responds the valid keywords' do
+    it 'returns the valid keywords' do
       get :index
       keywords = JSON.parse(response.body, symbolize_names: true)[:data]
 
