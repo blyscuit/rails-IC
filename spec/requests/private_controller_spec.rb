@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PrivateController, type: :request do
   describe 'GET#index' do
-    context 'when user is not sign in' do
+    context 'when the user is not signed in' do
       it 'redirects to the new user session page' do
         get '/private'
 
@@ -13,7 +13,7 @@ RSpec.describe PrivateController, type: :request do
       end
     end
 
-    context 'when user is sign in' do
+    context 'when the user is signed in' do
       it 'returns success status' do
         sign_in Fabricate(:user)
 
