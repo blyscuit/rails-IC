@@ -2,8 +2,8 @@
 
 module Api
   module V1
-    class PrivateController < ApplicationController
-      def sample
+    class PrivateItemsController < ApplicationController
+      def index
         render json: KeywordSerializer.new(Keyword.new(1, 'Hello')).serializable_hash.to_json
       end
     end
