@@ -7,6 +7,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :public, only: :index
-  resources :private, only: :index
+  resources :public_items, only: :index
+  resources :private_items, only: :index
 end

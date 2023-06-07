@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PrivateController < ApplicationController
+class PrivateItemsController < ApplicationController
   before_action :authenticate_user!
 
   def index

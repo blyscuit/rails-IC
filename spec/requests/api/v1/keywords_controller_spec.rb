@@ -8,7 +8,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'responds the valid keywords' do
+    it 'returns the valid keywords' do
       get api_v1_keywords_path
 
       keywords = JSON.parse(response.body, symbolize_names: true)[:data]
