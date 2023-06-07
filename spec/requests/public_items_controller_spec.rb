@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe PublicController, type: :request do
+RSpec.describe PublicItemsController, type: :request do
   describe 'GET#index' do
     it 'returns success status' do
-      get '/public'
+      get public_items_path
 
       expect(response).to have_http_status(:success)
     end

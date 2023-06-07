@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PublicController < ApplicationController
+class PublicItemsController < ApplicationController
   def index
     render json: 'Nice to meet you'
   end
