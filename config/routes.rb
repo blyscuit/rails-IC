@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   use_doorkeeper do
-    skip_controllers :authorizations, :authorized_applications, :tokens, :token_info
+    skip_controllers :applications, :authorizations, :authorized_applications, :tokens, :token_info
   end
 
-  devise_for :users
+  devise_for :users, skip: [:registrations, :confirmations, :sessions, :passwords], skip_helpers: true
   
   namespace :api do
     namespace :v1 do
