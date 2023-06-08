@@ -2,7 +2,6 @@
 
 module Api
   module V1
-    class TokensController < Doorkeeper::TokensController
-    end
+    class TokensController < Doorkeeper::TokensController; end
   end
 end

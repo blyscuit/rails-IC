@@ -17,7 +17,7 @@ module OAuthHelpers
   def query_token
     params = token_request_params
 
-    post :create, params: params
+    post api_v1_login_path, params: params
 
     JSON.parse(response.body)
   end
