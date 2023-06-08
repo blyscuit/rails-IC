@@ -3,6 +3,8 @@
 Doorkeeper.configure do
   orm :active_record
 
+  api_only
+
   resource_owner_from_credentials do |_routes|
     User.authenticate(params[:email], params[:password])
   end
