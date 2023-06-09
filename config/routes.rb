@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       end
       resources :keywords, only: :index
       resources :private_items, only: :index
-      post '/login', to: 'tokens#create'
+      resources :tokens, only: [:create]
     end
   end
 
