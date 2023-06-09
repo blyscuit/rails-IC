@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'json_matchers/rspec'
 require 'pundit/rspec'
+require 'rspec/file_fixtures'
 
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 

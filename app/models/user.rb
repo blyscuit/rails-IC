@@ -12,4 +12,7 @@ class User < ApplicationRecord
     user = User.find_for_authentication(email: email)
     user&.valid_password?(password) ? user : nil
   end
+
+  has_many :keyword_users, dependent: :destroy
+  has_many :keywords, through: :keyword_users
 end
