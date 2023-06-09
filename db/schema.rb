@@ -15,6 +15,21 @@ ActiveRecord::Schema.define(version: 2023_06_13_043615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "keyword_users", force: :cascade do |t|
+    t.bigint "keyword_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["keyword_id"], name: "index_keyword_users_on_keyword_id"
+    t.index ["user_id"], name: "index_keyword_users_on_user_id"
+  end
+
+  create_table "keywords", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.bigint "resource_owner_id"
     t.bigint "application_id", null: false
@@ -59,5 +74,7 @@ ActiveRecord::Schema.define(version: 2023_06_13_043615) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "keyword_users", "keywords"
+  add_foreign_key "keyword_users", "users"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
 end
