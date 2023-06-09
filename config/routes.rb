@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       end
       resources :keywords, only: :index
       resources :private_items, only: :index
-      resources :tokens, only: [:create]
+      post '/signup', to: 'registrations#create', as: :user_registration
     end
   end
 
