@@ -139,6 +139,9 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.3.3)
+    debug (1.8.0)
+      irb (>= 1.5.0)
+      reline (>= 0.3.1)
     debug_inspector (1.1.0)
     devise (4.9.2)
       bcrypt (~> 3.0)
@@ -176,6 +179,9 @@ GEM
       concurrent-ruby (~> 1.0)
     imagen (0.1.8)
       parser (>= 2.5, != 2.5.1.1)
+    io-console (0.6.0)
+    irb (1.7.0)
+      reline (>= 0.3.0)
     json (2.6.3)
     json_matchers (0.11.1)
       json_schema
@@ -276,6 +282,9 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails-i18n (7.0.7)
+      i18n (>= 0.7, < 2)
+      railties (>= 6.0.0, < 8)
     railties (7.0.1)
       actionpack (= 7.0.1)
       activesupport (= 7.0.1)
@@ -296,6 +305,8 @@ GEM
       parser (~> 3.0.0)
       rainbow (>= 2.0, < 4.0)
     regexp_parser (2.8.0)
+    reline (0.3.5)
+      io-console (~> 0.5)
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -422,6 +433,7 @@ DEPENDENCIES
   danger-suggester
   danger-undercover
   database_cleaner
+  debug
   devise
   discard
   doorkeeper
@@ -444,6 +456,7 @@ DEPENDENCIES
   rack-timeout
   rails (= 7.0.1)
   rails-controller-testing
+  rails-i18n
   roadie-rails
   rspec-rails (~> 6.0)
   rspec-retry
