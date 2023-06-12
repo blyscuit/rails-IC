@@ -1,14 +1,18 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'byebug'
 
 RSpec.describe RegistrationForm do
   describe '#save' do
+    application ||= Fabricate(:application)
+
     context 'given valid user input' do
       params = {
         email: "test+#{Time.now.to_i}@nimblehq.co",
         password: '123456',
         password_confirmation: '123456',
-        client_id: Doorkeeper::Application.first(1).first.uid
+        client_id: application.uid
       }
       it 'returns true' do
         form = described_class.new
@@ -18,11 +22,13 @@ RSpec.describe RegistrationForm do
     end
 
     context 'given user has entered a duplicated email' do
+      user = Fabricate(:user)
+
       params = {
-        email: 'test@nimblehq.co',
+        email: user.email,
         password: '123456',
         password_confirmation: '123456',
-        client_id: Doorkeeper::Application.first(1).first.uid
+        client_id: application.uid
       }
 
       it 'return nil' do
@@ -44,7 +50,7 @@ RSpec.describe RegistrationForm do
         email: "test+#{Time.now.to_i}@nimblehq.co",
         password: '123456',
         password_confirmation: '12456',
-        client_id: Doorkeeper::Application.first(1).first.uid
+        client_id: application.uid
       }
 
       it 'return nil' do
@@ -66,7 +72,7 @@ RSpec.describe RegistrationForm do
         email: 'test@nimblehq.co',
         password: '123456',
         password_confirmation: '123456',
-        client_id: 'client_id'
+        client_id: ''
       }
 
       it 'return nil' do
@@ -78,7 +84,6 @@ RSpec.describe RegistrationForm do
       it 'has error messages' do
         form = described_class.new
         form.save(invalid_client_signup_params)
-
         expect(form.errors.messages[:client_id]).to include('Client authentication failed due to unknown client, no client '\
                                                             'authentication included, or unsupported authentication method.')
       end

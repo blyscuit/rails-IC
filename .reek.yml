@@ -10,7 +10,7 @@ detectors:
   DataClump:
     max_copies: 3
     min_clump_size: 3
-  
+
   UncommunicativeModuleName:
     accept:
       - V1
@@ -32,6 +32,9 @@ directories:
       enabled: false
   "app/model":
     InstanceVariableAssumption:
+      enabled: false
+  "app/forms":
+    FeatureEnvy:
       enabled: false
   "engines/**/app/controllers/**":
     NestedIterators:
