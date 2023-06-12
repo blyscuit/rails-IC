@@ -8,7 +8,6 @@ RSpec.describe CSVUploadForm, type: :form do
       it 'can save' do
         user = Fabricate(:user)
         form = described_class.new(user)
-        form.save(file_fixture('csv/valid.csv'))
         saved = form.save(file_fixture('csv/valid.csv'))
         expect(saved).to be(true)
       end
@@ -54,6 +53,15 @@ RSpec.describe CSVUploadForm, type: :form do
         form.save(file_fixture('csv/wrong_type.txt'))
 
         expect(form.errors.full_messages).to include(I18n.t('csv.validation.wrong_type'))
+      end
+    end
+
+    context 'given a file with 9 keywords and 1 blank' do
+      it 'saves 9 keywords with the correct user' do
+        user = Fabricate(:user)
+        form = described_class.new(user)
+        form.save(file_fixture('csv/blank.csv'))
+        expect(keyword_for_user(user).count).to eq(9)
       end
     end
 
