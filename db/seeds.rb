@@ -13,7 +13,7 @@ if Doorkeeper::Application.count.zero?
 end
 
 User.first_or_create(
-  email: "test@nimblehq.com",
+  email: "test@nimblehq.co",
   password: "123456",
   password_confirmation: "123456",
 )
