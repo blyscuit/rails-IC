@@ -85,7 +85,6 @@ group :test do
   gem 'vcr' # Gem for recording test suite's HTTP interactions
   gem 'timecop' # Gem for time travel
   gem 'rails-controller-testing' # Gem that allow to use assigns as well ass assert_template
-  gem 'rspec-file_fixtures' # Stub File.open from fixtures
 end
 
 group :production do
