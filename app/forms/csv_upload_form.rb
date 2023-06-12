@@ -36,11 +36,9 @@ class CSVUploadForm
   end
 
   def keyword_hash
-    CSV.read(file).filter_map do |row|
+    CSV.read(file).filter_map { |row|
       name = row.join(',')
-      return nil if name.blank?
-
-      { name: name }
-    end
+      name.blank? ? false : { name: name }
+    }
   end
 end
