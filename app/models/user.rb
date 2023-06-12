@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   validates :password, confirmation: true
   validates :password_confirmation, presence: true
-  validates :email, format: URI::MailTo::EMAIL_REGEXP
+  validates :email, format: Devise.email_regexp
 
   # the authenticate method from devise documentation
   def self.authenticate(email, password)

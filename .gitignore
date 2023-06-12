@@ -43,3 +43,4 @@
 # Ignore Spec Cache
 spec/examples.txt
 vendor
+.byebug_history

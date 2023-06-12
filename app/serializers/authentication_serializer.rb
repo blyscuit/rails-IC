@@ -1,3 +1,0 @@
-class AuthenticationSerializer: ApplicationSerializer
-
-end

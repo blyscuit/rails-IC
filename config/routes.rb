@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
       resources :keywords, only: :index
       resources :private_items, only: :index
-      post '/signup', to: 'registrations#create'
+      resources :registrations, only: [:create]
     end
   end
 
