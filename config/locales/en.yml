@@ -31,7 +31,3 @@
 
 en:
   hello: "Hello world"
-  error:
-    invalid_email: "Invalid email address"
-    invalid_password: "Invalid password"
-    invalid_client: "Invalid client"

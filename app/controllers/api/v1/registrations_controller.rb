@@ -6,17 +6,17 @@ module Api
       skip_before_action :doorkeeper_authorize!
 
       def create
-        validation = RegistrationForm.new(sign_up_params)
-        if validation.save
+        registration_form = RegistrationForm.new
+        if registration_form.save(create_params)
           render success: true, status: :created
         else
-          render json: { error: validation.errors.full_messages.to_sentence }, status: :unprocessable_entity
+          render json: { error: registration_form.errors.full_messages.to_sentence }, status: :unprocessable_entity
         end
       end
 
       private
 
-      def sign_up_params
+      def create_params
         params.permit(:email, :password, :password_confirmation, :client_id)
       end
     end
