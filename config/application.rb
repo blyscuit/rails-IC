@@ -17,6 +17,8 @@ module GoogleSearchRuby
     # eg: FALLBACK_LOCALES = 'en,th'
     config.i18n.fallbacks = ENV.fetch('FALLBACK_LOCALES').split(',')
 
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 

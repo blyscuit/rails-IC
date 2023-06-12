@@ -1,0 +1,3 @@
+class AuthenticationSerializer: ApplicationSerializer
+
+end

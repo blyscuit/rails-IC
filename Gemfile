@@ -25,7 +25,7 @@ gem 'doorkeeper' # OAuth 2 provider functionality to Ruby on Rails
 
 # Translations
 # gem 'devise-i18n' # Translations for Devise
-# gem 'rails-i18n', '~> 6.0.0' # Translations for Rails
+gem 'rails-i18n' # Translations for Rails
 # gem 'devise-i18n' # Translations for Devise
 
 group :development do
@@ -37,6 +37,7 @@ group :development do
   gem 'spring' # Spring speeds up development by keeping your application running in the background.
   gem 'spring-commands-rspec' # This gem implements the rspec command for Spring.
   gem 'spring-watcher-listen', '2.0.1' # Makes Spring watch the filesystem for changes using Listen
+  gem "debug"
 end
 
 group :development, :test do
