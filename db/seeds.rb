@@ -7,13 +7,9 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 if Doorkeeper::Application.count.zero?
-  Doorkeeper::Application.create!(name: "Web Client", redirect_uri: "", scopes: "")
-  Doorkeeper::Application.create!(name: "iOS Client", redirect_uri: "", scopes: "")
-  Doorkeeper::Application.create!(name: "Android Client", redirect_uri: "", scopes: "")
+  Doorkeeper::Application.create!(name: 'Web Client', redirect_uri: '', scopes: '')
+  Doorkeeper::Application.create!(name: 'iOS Client', redirect_uri: '', scopes: '')
+  Doorkeeper::Application.create!(name: 'Android Client', redirect_uri: "", scopes: '')
 end
 
-User.first_or_create(
-  email: "test@nimblehq.co",
-  password: "123456",
-  password_confirmation: "123456",
-)
+User.find_or_create_by(email: 'test@nimblehq.co')
