@@ -16,6 +16,5 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     DatabaseCleaner.strategy = example.metadata[:type] == :feature ? :seeded : :transaction
     DatabaseCleaner.cleaning { example.run }
-    Rails.application.load_seed
   end
 end
