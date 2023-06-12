@@ -4,12 +4,14 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::RegistrationsController, type: :request do
   describe 'POST#signup' do
+    application ||= Fabricate(:application)
+
     context 'given valid email and password' do
       valid_signup_params = {
         email: "test+#{Time.now.to_i}@nimblehq.co",
         password: '123456',
         password_confirmation: '123456',
-        client_id: Doorkeeper::Application.first(1).first.uid
+        client_id: application.uid
       }
 
       it 'returns http status of created' do
@@ -20,11 +22,13 @@ RSpec.describe Api::V1::RegistrationsController, type: :request do
     end
 
     context 'given duplicated email' do
+      user ||= Fabricate(:user)
+
       duplicated_email_signup_params = {
-        email: 'test@nimblehq.co',
+        email: user.email,
         password: '123456',
         password_confirmation: '123456',
-        client_id: Doorkeeper::Application.first(1).first.uid
+        client_id: application.uid
       }
 
       it 'returns http status of unprocessable content' do
@@ -39,7 +43,7 @@ RSpec.describe Api::V1::RegistrationsController, type: :request do
         email: 'test@nimblehq.co',
         password: '123456',
         password_confirmation: '123456',
-        client_id: 'client_id'
+        client_id: ''
       }
 
       it 'returns http status of unprocessable content' do
@@ -54,7 +58,7 @@ RSpec.describe Api::V1::RegistrationsController, type: :request do
         email: "test+#{Time.now.to_i}@nimblehq.co",
         password: '123456',
         password_confirmation: '12456',
-        client_id: Doorkeeper::Application.first(1).first.uid
+        client_id: application.uid
       }
 
       it 'returns http status of unprocessable content' do
