@@ -2,7 +2,5 @@
 
 class Keyword < ApplicationRecord
   validates :name, presence: true
-
-  has_many :keyword_users, dependent: :destroy
-  has_many :users, through: :keyword_users
+  belongs_to :user, inverse_of: :keywords
 end

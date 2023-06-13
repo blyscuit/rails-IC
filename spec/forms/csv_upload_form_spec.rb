@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CSVUploadForm, type: :form do
+RSpec.describe CsvUploadForm, type: :form do
   describe '#save' do
     context 'given a valid file of 10 keywords' do
       it 'can save' do
@@ -68,11 +68,7 @@ RSpec.describe CSVUploadForm, type: :form do
     private
 
     def keyword_for_user(user)
-      Keyword.where(
-        id: KeywordUser.where(
-          user_id: user.id
-        ).map(&:keyword_id)
-      ).map(&:name)
+      Keyword.where(user: user.id).map(&:name)
     end
   end
 end
