@@ -12,9 +12,8 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.include OAuthHelpers
-
   config.around(:each) do |example|
-    DatabaseCleaner.strategy = example.metadata[:type] == :feature ? :seeded : :transaction
+    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.cleaning { example.run }
   end
 end

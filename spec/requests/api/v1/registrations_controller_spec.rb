@@ -4,65 +4,41 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::RegistrationsController, type: :request do
   describe 'POST#signup' do
-    application ||= Fabricate(:application)
-
     context 'given valid email and password' do
-      valid_signup_params = {
-        email: "test+#{Time.now.to_i}@nimblehq.co",
-        password: '123456',
-        password_confirmation: '123456',
-        client_id: application.uid
-      }
-
       it 'returns http status of created' do
-        post api_v1_registrations_path, params: valid_signup_params
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user).merge!(client_id: application.uid)
+        post api_v1_registrations_path, params: params
 
         expect(response).to have_http_status(:created)
       end
     end
 
     context 'given duplicated email' do
-      user ||= Fabricate(:user)
-
-      duplicated_email_signup_params = {
-        email: user.email,
-        password: '123456',
-        password_confirmation: '123456',
-        client_id: application.uid
-      }
-
       it 'returns http status of unprocessable content' do
-        post api_v1_registrations_path, params: duplicated_email_signup_params
+        application ||= Fabricate(:application)
+        user ||= Fabricate(:user)
+        params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: application.uid)
+        post api_v1_registrations_path, params: params
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
     context 'given invalid client id' do
-      invalid_client_signup_params = {
-        email: 'test@nimblehq.co',
-        password: '123456',
-        password_confirmation: '123456',
-        client_id: ''
-      }
-
       it 'returns http status of unprocessable content' do
-        post api_v1_registrations_path, params: invalid_client_signup_params
+        params = Fabricate.attributes_for(:user).merge!(client_id: '')
+        post api_v1_registrations_path, params: params
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
     context 'given unmatched confirm password' do
-      confirm_password_not_matched_signup_params = {
-        email: "test+#{Time.now.to_i}@nimblehq.co",
-        password: '123456',
-        password_confirmation: '12456',
-        client_id: application.uid
-      }
-
       it 'returns http status of unprocessable content' do
-        post api_v1_registrations_path, params: confirm_password_not_matched_signup_params
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, password_confirmation: '123').merge!(client_id: application.uid)
+        post api_v1_registrations_path, params: params
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
