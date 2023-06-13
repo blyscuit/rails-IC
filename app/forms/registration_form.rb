@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
-require 'byebug'
-
 class RegistrationForm < ApplicationForm
   def save(create_params)
-    return unless validate_client(create_params[:client_id])
+    return false unless client_valid?(create_params[:client_id])
 
     user = User.new(create_params.except(:client_id))
 
-    unless user.valid?
-      user_error = user.errors
-      errors.add(:user, user_error.full_messages.last) unless user_error.empty?
+    if user.invalid?
+      errors.merge!(user.errors)
 
-      return
+      return false
     end
 
     user.save
@@ -20,13 +17,11 @@ class RegistrationForm < ApplicationForm
 
   private
 
-  def validate_client(client_id)
-    unless Doorkeeper::Application.find_by(uid: client_id)
-      errors.add(:client_id, I18n.t('doorkeeper.errors.messages.invalid_client'))
+  def client_valid?(client_id)
+    return true if Doorkeeper::Application.exists?(uid: client_id)
 
-      return
-    end
+    errors.add(:client_id, I18n.t('doorkeeper.errors.messages.invalid_client'))
 
-    true
+    false
   end
 end
