@@ -13,6 +13,7 @@ gem 'sassc' # bootsnap dependency
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'jsonapi-serializer' # JSON: API serializer for Ruby
+gem 'httparty' # A library to make http request easier
 # gem 'jbuilder' # Build JSON APIs with ease
 # gem 'redis' # Use Redis adapter to run Action Cable in production
 # gem 'kredis' # Use Kredis to get higher-level data types in Redis

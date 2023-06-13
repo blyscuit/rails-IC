@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Module Google
+module Google
   class SearchJob
     def perform(keyword_id)
     end
