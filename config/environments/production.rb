@@ -55,13 +55,23 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "google_search_ruby_production"
 
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_caching = false
-
-  config.action_mailer.asset_host = ENV.fetch('MAILER_DEFAULT_HOST')
 
   config.action_mailer.default_url_options = {
     host: ENV.fetch('MAILER_DEFAULT_HOST'),
     port: ENV.fetch('MAILER_DEFAULT_PORT')
+  }
+
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch('SMTP_MAIL_SERVER'),
+    port: ENV.fetch('SMTP_PORT'),
+    authentication: :plain,
+    user_name: Rails.application.credentials.dig(:mail_sender, :user_name),
+    password:  Rails.application.credentials.dig(:mail_sender, :password),
+    enable_starttls_auto: true
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
@@ -70,7 +80,6 @@ Rails.application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
-  
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
