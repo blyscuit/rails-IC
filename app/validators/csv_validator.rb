@@ -2,35 +2,33 @@
 
 require 'csv'
 
-class CSVValidator < ActiveModel::Validator
-  def validate(csv_form)
-    @csv_form = csv_form
+class CsvValidator < ActiveModel::Validator
+  CSV_EXTENSION = '.csv'
 
-    validate_file
+  def validate(csv_form)
+    validate_file(csv_form)
   end
 
   private
-
-  attr_reader :csv_form
 
   def file
     csv_form.file
   end
 
-  def validate_file
-    add_error :wrong_count unless valid_count?
-    add_error :wrong_type unless valid_extension?
+  def validate_file(csv_form)
+    add_error(csv_form, :wrong_count) unless valid_count(csv_form.file)
+    add_error(csv_form, :wrong_type) unless valid_extension(csv_form.file)
   end
 
-  def add_error(type)
+  def add_error(csv_form, type)
     csv_form.errors.add(:base, I18n.t("csv.validation.#{type}"))
   end
 
-  def valid_count?
+  def valid_count(file)
     CSV.read(file).count.between?(1, 1000)
   end
 
-  def valid_extension?
-    File.extname(file) == '.csv'
+  def valid_extension(file)
+    File.extname(file) == CSV_EXTENSION
   end
 end

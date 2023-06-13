@@ -2,43 +2,32 @@
 
 require 'csv'
 
-class CSVUploadForm
+class CsvUploadForm
   include ActiveModel::Validations
 
   attr_reader :file
 
-  validates_with CSVValidator
+  validates_with CsvValidator
 
-  def initialize(user)
-    @user = user
+  def initialize(current_user)
+    @current_user = current_user
   end
 
   def save(file)
     @file = file
     return false unless file && valid?
 
-    begin
-      save_keywords
-    rescue ActiveRecord::StatementInvalid
-      errors.add(:base, I18n.t('csv.validation.bad_keyword_length'))
-    end
+    Keyword.insert_all(keyword_hash)
+
     errors.empty?
   end
 
   private
 
-  def save_keywords
-    keyword_hash.each do |hash|
-      keyword = Keyword.find_or_create_by!(hash)
-      keyword_user_hash = { keyword: keyword, user: @user }
-      KeywordUser.find_or_create_by!(keyword_user_hash)
-    end
-  end
-
   def keyword_hash
-    CSV.read(file).filter_map { |row|
+    CSV.read(file).filter_map do |row|
       name = row.join(',')
-      name.blank? ? false : { name: name }
-    }
+      name.blank? ? false : { name: name, user_id: @current_user.id }
+    end
   end
 end
