@@ -11,10 +11,6 @@ class CsvValidator < ActiveModel::Validator
 
   private
 
-  def file
-    csv_form.file
-  end
-
   def validate_file(csv_form)
     add_error(csv_form, :wrong_count) unless valid_count(csv_form.file)
     add_error(csv_form, :wrong_type) unless valid_extension(csv_form.file)
