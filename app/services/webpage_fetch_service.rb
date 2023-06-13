@@ -12,14 +12,13 @@ class WebpageFetchService
     return false unless valid_result? result
 
     result
-  rescue HTTParty::Error, Timeout::Error, SocketError => e
+  rescue HTTParty::Error, Timeout::Error, SocketError
     false
   end
 
   private
 
   def valid_result?(result)
-    return true if result&.response&.code == '200'
-    false
+    result&.response&.code == '200'
   end
 end
