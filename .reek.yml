@@ -36,6 +36,9 @@ directories:
   "app/forms":
     FeatureEnvy:
       enabled: false
+  "app/validators":
+    UtilityFunction:
+      enabled: false
   "engines/**/app/controllers/**":
     NestedIterators:
       max_allowed_nesting: 2
