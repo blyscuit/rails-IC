@@ -6,10 +6,12 @@ default: &default
   DB_PASSWORD: "postgres"
   MAILER_DEFAULT_HOST: "localhost"
   MAILER_DEFAULT_PORT: "3000"
-  MAILER_SENDER: "Test <noreply@nimblehq.co>"
+  MAILER_SENDER: "Test <noreplyrailsic@gmail.com>"
   AVAILABLE_LOCALES: "en"
   DEFAULT_LOCALE: "en"
   FALLBACK_LOCALES: "en"
+  SMTP_PORT: 587
+  SMTP_MAIL_SERVER: 'smtp.gmail.com'
 
 development:
   <<: *default
