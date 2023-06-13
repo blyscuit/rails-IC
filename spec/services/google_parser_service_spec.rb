@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GoogleParserService do
+RSpec.describe GoogleParserService, type: :service do
   describe '#call' do
     context 'given a valid google page' do
       it 'returns 3 top ads count' do
