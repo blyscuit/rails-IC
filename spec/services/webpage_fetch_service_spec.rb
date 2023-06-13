@@ -18,8 +18,7 @@ RSpec.describe WebpageFetchService, type: :service do
       it 'returns an HTTParty Response' do
         url = FFaker::Internet.http_url
         user_agent = FFaker::FreedomIpsum.word
-        WebMock.stub_request(:get, url)
-          .with(headers: { 'User-Agent' => user_agent })
+        WebMock.stub_request(:get, url).with(headers: { 'User-Agent' => user_agent })
         result = described_class.new(url, user_agent).call
 
         expect(result).to be_an_instance_of(HTTParty::Response)
@@ -29,11 +28,10 @@ RSpec.describe WebpageFetchService, type: :service do
     context 'when querying a webpage returns 500 error' do
       it 'returns false' do
         url = FFaker::Internet.http_url
-        puts url
         WebMock.stub_request(:get, url).to_return(status: 500)
         result = described_class.new(url, nil).call
 
-        expect(result).to eq(false)
+        expect(result).to be(false)
       end
     end
   end
