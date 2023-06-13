@@ -1,91 +1,119 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'byebug'
 
 RSpec.describe RegistrationForm do
   describe '#save' do
-    application ||= Fabricate(:application)
-
     context 'given valid user input' do
-      params = {
-        email: "test+#{Time.now.to_i}@nimblehq.co",
-        password: '123456',
-        password_confirmation: '123456',
-        client_id: application.uid
-      }
       it 'returns true' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user).merge!(client_id: application.uid)
         form = described_class.new
 
         expect(form.save(params)).to be(true)
       end
-    end
 
-    context 'given user has entered a duplicated email' do
-      user = Fabricate(:user)
-
-      params = {
-        email: user.email,
-        password: '123456',
-        password_confirmation: '123456',
-        client_id: application.uid
-      }
-
-      it 'return nil' do
-        form = described_class.new
-
-        expect(form.save(params)).to be_nil
-      end
-
-      it 'has error messages' do
+      it 'has no error messsages' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user).merge!(client_id: application.uid)
         form = described_class.new
         form.save(params)
 
-        expect(form.errors.messages[:user]).to include('Email has already been taken')
+        expect(form.errors).to be_empty
+      end
+    end
+
+    context 'given user has entered a duplicated email' do
+      it 'returns false' do
+        user ||= Fabricate(:user)
+        params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
+        form = described_class.new
+
+        expect(form.save(params)).to be false
+      end
+
+      it 'has error messages' do
+        user ||= Fabricate(:user)
+        params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
+        form = described_class.new
+        form.save(params)
+
+        expect(form.errors[:email]).to include('has already been taken')
       end
     end
 
     context 'given user has entered a different confirm password' do
-      params = {
-        email: "test+#{Time.now.to_i}@nimblehq.co",
-        password: '123456',
-        password_confirmation: '12456',
-        client_id: application.uid
-      }
-
-      it 'return nil' do
+      it 'returns false' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, password_confirmation: '123').merge!(client_id: application.uid)
         form = described_class.new
 
-        expect(form.save(params)).to be_nil
+        expect(form.save(params)).to be false
       end
 
       it 'has error messages' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, password_confirmation: '123').merge!(client_id: application.uid)
         form = described_class.new
         form.save(params)
 
-        expect(form.errors.messages[:user]).to include('Password confirmation doesn\'t match Password')
+        expect(form.errors[:password_confirmation]).to include("doesn't match Password")
       end
     end
 
     context 'given user has entered an invalid client id' do
-      invalid_client_signup_params = {
-        email: 'test@nimblehq.co',
-        password: '123456',
-        password_confirmation: '123456',
-        client_id: ''
-      }
-
-      it 'return nil' do
+      it 'returns false' do
+        params = Fabricate.attributes_for(:user).merge!(client_id: '')
         form = described_class.new
 
-        expect(form.save(invalid_client_signup_params)).to be_nil
+        expect(form.save(params)).to be false
       end
 
       it 'has error messages' do
+        params = Fabricate.attributes_for(:user).merge!(client_id: '')
         form = described_class.new
-        form.save(invalid_client_signup_params)
+        form.save(params)
+
         expect(form.errors.messages[:client_id]).to include('Client authentication failed due to unknown client, no client '\
                                                             'authentication included, or unsupported authentication method.')
+      end
+    end
+
+    context 'given user has entered an invalid email address' do
+      it 'returns false' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, email: 'test@nimblehq..co').merge!(client_id: application.uid)
+        form = described_class.new
+
+        expect(form.save(params)).to be false
+      end
+
+      it 'has error messsages' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, email: 'test@nimblehq..co').merge!(client_id: application.uid)
+        form = described_class.new
+        form.save(params)
+
+        expect(form.errors[:email]).to include('is invalid')
+      end
+    end
+
+    context 'given user has entered an email address has sub domain' do
+      it 'returns true' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, email: 'test@nimblehq.dev.co').merge!(client_id: application.uid)
+        form = described_class.new
+
+        expect(form.save(params)).to be true
+      end
+
+      it 'has no error messsages' do
+        application ||= Fabricate(:application)
+        params = Fabricate.attributes_for(:user, email: 'test@nimblehq.dev.co').merge!(client_id: application.uid)
+        form = described_class.new
+        form.save(params)
+
+        expect(form.errors).to be_empty
       end
     end
   end

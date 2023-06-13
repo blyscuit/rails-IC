@@ -6,10 +6,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  validates :password, confirmation: true
-  validates :password_confirmation, presence: true
-  validates :email, format: Devise.email_regexp
-
   # the authenticate method from devise documentation
   def self.authenticate(email, password)
     user = User.find_for_authentication(email: email)
