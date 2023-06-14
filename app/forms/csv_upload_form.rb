@@ -17,7 +17,9 @@ class CsvUploadForm
     @file = file
     return false unless file && valid?
 
+    # rubocop:disable Rails/SkipsModelValidations
     Keyword.insert_all(keyword_hash)
+    # rubocop:enable Rails/SkipsModelValidations
 
     errors.empty?
   end
