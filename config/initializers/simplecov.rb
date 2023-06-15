@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-require 'simplecov-json'
-require 'simplecov-lcov'
+if ENV['RAILS_ENV'] == 'test' 
+  require 'simplecov'
+  require 'simplecov-json'
+  require 'simplecov-lcov'
 
-formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::JSONFormatter, SimpleCov::Formatter::LcovFormatter]
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
+  formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::JSONFormatter, SimpleCov::Formatter::LcovFormatter]
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 
-if ENV['CIRCLE_ARTIFACTS']
-  dir = File.join('..', '..', '..', ENV['CIRCLE_ARTIFACTS'], 'coverage')
-  SimpleCov.coverage_dir(dir)
-end
+  if ENV['CIRCLE_ARTIFACTS']
+    dir = File.join('..', '..', '..', ENV['CIRCLE_ARTIFACTS'], 'coverage')
+    SimpleCov.coverage_dir(dir)
+  end
 
-SimpleCov.start 'rails' do
-  add_filter '/vendor/'
-  add_filter '/config/'
-  add_filter '/spec/'
-  add_filter '/db/'
+  SimpleCov.start 'rails' do
+    add_filter '/vendor/'
+    add_filter '/config/'
+    add_filter '/spec/'
+    add_filter '/db/'
+  end
 end
