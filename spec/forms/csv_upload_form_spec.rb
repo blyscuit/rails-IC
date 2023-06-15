@@ -9,6 +9,7 @@ RSpec.describe CsvUploadForm, type: :form do
         user = Fabricate(:user)
         form = described_class.new(user)
         saved = form.save(file_fixture('csv/valid.csv'))
+
         expect(saved).to be(true)
       end
 
@@ -16,6 +17,7 @@ RSpec.describe CsvUploadForm, type: :form do
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'))
+
         expect(keyword_for_user(user).count).to eq(10)
       end
 
@@ -24,6 +26,7 @@ RSpec.describe CsvUploadForm, type: :form do
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'))
         csv_entries = CSV.read(File.open(form.file)).map { |str| str.join(',') }
+
         expect(csv_entries).to match_array(keyword_for_user(user))
       end
     end
@@ -32,6 +35,7 @@ RSpec.describe CsvUploadForm, type: :form do
       it 'does not save any keyword' do
         user = Fabricate(:user)
         form = described_class.new(user)
+
         expect { form.save(nil) }.not_to change(Keyword, :count)
       end
     end
@@ -61,6 +65,7 @@ RSpec.describe CsvUploadForm, type: :form do
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/blank.csv'))
+
         expect(keyword_for_user(user).count).to eq(9)
       end
     end

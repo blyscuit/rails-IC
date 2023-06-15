@@ -4,6 +4,7 @@ require 'csv'
 
 class CsvValidator < ActiveModel::Validator
   CSV_EXTENSION = '.csv'
+  ROWS_LIMIT = 1000
 
   def validate(csv_form)
     file = csv_form.file
@@ -18,7 +19,7 @@ class CsvValidator < ActiveModel::Validator
   end
 
   def valid_count(file)
-    CSV.read(file).count.between?(1, 1000)
+    CSV.read(file).count.between?(1, ROWS_LIMIT)
   end
 
   def valid_extension(file)
