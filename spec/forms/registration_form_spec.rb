@@ -6,7 +6,7 @@ RSpec.describe RegistrationForm do
   describe '#save' do
     context 'given valid user input' do
       it 'returns true' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user).merge!(client_id: application.uid)
         form = described_class.new
 
@@ -14,7 +14,7 @@ RSpec.describe RegistrationForm do
       end
 
       it 'has no error messsages' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user).merge!(client_id: application.uid)
         form = described_class.new
         form.save(params)
@@ -25,7 +25,7 @@ RSpec.describe RegistrationForm do
 
     context 'given user has entered a duplicated email' do
       it 'returns false' do
-        user ||= Fabricate(:user)
+        user = Fabricate(:user)
         params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
         form = described_class.new
 
@@ -33,7 +33,7 @@ RSpec.describe RegistrationForm do
       end
 
       it 'has error messages' do
-        user ||= Fabricate(:user)
+        user = Fabricate(:user)
         params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
         form = described_class.new
         form.save(params)
@@ -44,7 +44,7 @@ RSpec.describe RegistrationForm do
 
     context 'given user has entered a different confirm password' do
       it 'returns false' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user, password_confirmation: '123').merge!(client_id: application.uid)
         form = described_class.new
 
@@ -52,7 +52,7 @@ RSpec.describe RegistrationForm do
       end
 
       it 'has error messages' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user, password_confirmation: '123').merge!(client_id: application.uid)
         form = described_class.new
         form.save(params)
@@ -81,7 +81,7 @@ RSpec.describe RegistrationForm do
 
     context 'given user has entered an invalid email address' do
       it 'returns false' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user, email: 'test@nimblehq..co').merge!(client_id: application.uid)
         form = described_class.new
 
@@ -89,7 +89,7 @@ RSpec.describe RegistrationForm do
       end
 
       it 'has error messsages' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user, email: 'test@nimblehq..co').merge!(client_id: application.uid)
         form = described_class.new
         form.save(params)
@@ -100,7 +100,7 @@ RSpec.describe RegistrationForm do
 
     context 'given user has entered an email address has sub domain' do
       it 'returns true' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user, email: 'test@nimblehq.dev.co').merge!(client_id: application.uid)
         form = described_class.new
 
@@ -108,7 +108,7 @@ RSpec.describe RegistrationForm do
       end
 
       it 'has no error messsages' do
-        application ||= Fabricate(:application)
+        application = Fabricate(:application)
         params = Fabricate.attributes_for(:user, email: 'test@nimblehq.dev.co').merge!(client_id: application.uid)
         form = described_class.new
         form.save(params)
