@@ -1,34 +1,26 @@
-# Git Repository Template
+# Google Search Ruby
 
-Project repository template to set up all public projects at [Nimble](https://nimblehq.co/)
+- Staging URL: https://rails-ic-phong-bliss-staging.herokuapp.com
+- Production URL (Not deployed): https://rails-ic-phong-bliss.herokuapp.com
 
-## Usage
+[![Build Status](https://github.com/blyscuit/docs/actions/workflows/deploy_fly.yml/badge.svg)](https://github.com/blyscuit/rails-ic/tree/chore/3-deployment-automation)
 
-Clone the repository
+## Introduction
 
-`git clone git@github.com:nimblehq/git-template.git`
+Web Search Data Fetcher for Rails Internal Certificate.
 
-## License
+## Quick Start
 
-This project is Copyright (c) 2014 and onwards Nimble. It is free software and may be redistributed under the terms specified in the [LICENSE] file.
+### Requirements
 
-[LICENSE]: /LICENSE
+- Install ruby and set your local ruby version to `3.0.1`
 
-## About
-<a href="https://nimblehq.co/">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://assets.nimblehq.co/logo/dark/logo-dark-text-160.png">
-    <img alt="Nimble logo" src="https://assets.nimblehq.co/logo/light/logo-light-text-160.png">
-  </picture>
-</a>
+### Use Script
 
-This project is maintained and funded by Nimble.
+```sh
+make dev
+```
 
-We ❤️ open source and do our part in sharing our work with the community!
-See [our other projects][community] or [hire our team][hire] to help build your product.
+## Documentation
 
-Want to join? [Check out our Jobs][jobs]!
-
-[community]: https://github.com/nimblehq
-[hire]: https://nimblehq.co/
-[jobs]: https://jobs.nimblehq.co/
+Please check out full documentation on the [wiki](../../wiki).

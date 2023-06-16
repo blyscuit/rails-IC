@@ -1,4 +1,4 @@
-- Close #
+- close #
 
 ## What happened 👀
 
