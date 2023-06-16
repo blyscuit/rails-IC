@@ -17,19 +17,18 @@ class CsvUploadForm
     @file = file
     return false unless file && valid?
 
-    # rubocop:disable Rails/SkipsModelValidations
-    Keyword.insert_all(keyword_hash)
-    # rubocop:enable Rails/SkipsModelValidations
+    ActiveRecord::Base.transaction { keywords.each(&:save) }
 
     errors.empty?
   end
 
   private
 
-  def keyword_hash
-    CSV.read(file).filter_map do |row|
-      name = row.join(',')
-      name.blank? ? false : { name: name, user_id: @current_user.id }
+  def keywords
+    CSV.read(file).filter_map do |row_columns|
+      keyword = Keyword.new(name: row_columns.to_csv.chomp, user_id: @current_user.id)
+
+      keyword if keyword.valid?
     end
   end
 end
