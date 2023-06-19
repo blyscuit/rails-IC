@@ -3,7 +3,7 @@
 module Api
   module V1
     class ApplicationController < ActionController::API
-      include ErrorHandlerConcern
+      include ErrorRenderable
 
       before_action :doorkeeper_authorize!
 

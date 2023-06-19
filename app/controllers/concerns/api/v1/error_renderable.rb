@@ -2,9 +2,7 @@
 
 module Api
   module V1
-    module ErrorHandlerConcern
-      extend ActiveSupport::Concern
-
+    module ErrorRenderable
       private
 
       def render_error(detail, source: nil, status: :unprocessable_entity)

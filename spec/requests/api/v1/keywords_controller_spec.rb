@@ -56,6 +56,13 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
+      it 'returns a invalid_file error' do
+        header, = create_token_header
+        post api_v1_keywords_path, headers: header
+
+        expect(JSON.parse(response.body)['errors']['code']).to eq('invalid_file')
+      end
     end
 
     context 'when csv file is in the wrong type' do
@@ -65,6 +72,14 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         post api_v1_keywords_path, params: params, headers: header
 
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns a wrong_type error' do
+        header, = create_token_header
+        params = { 'file' => fixture_file_upload('csv/wrong_type.txt') }
+        post api_v1_keywords_path, params: params, headers: header
+
+        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('csv.validation.wrong_type'))
       end
     end
 
