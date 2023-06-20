@@ -50,8 +50,8 @@ RSpec.describe CsvUploadForm, type: :form do
       end
     end
 
-    context 'given a non csv file' do
-      it 'returns a wrong_type error' do
+    context 'given a none CSV file' do
+      it 'returns the wrong_type error' do
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/wrong_type.txt'))
