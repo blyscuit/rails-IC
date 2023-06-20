@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-class WebpageFetchService
-  def initialize(url, user_agent)
+class FetchWebpageService
+  def initialize(url, headers)
     @uri = URI(url)
-    @user_agent = user_agent
+    @headers = headers
   end
 
   def call
-    result = HTTParty.get(@uri, { headers: { 'User-Agent' => @user_agent } })
+    result = HTTParty.get(@uri, headers: @headers)
 
-    return false unless valid_result? result
+    return unless valid_result? result
 
     result
   rescue HTTParty::Error, Timeout::Error, SocketError
-    false
+    nil
   end
 
   private

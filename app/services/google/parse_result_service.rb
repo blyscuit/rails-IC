@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Google
-  class ParserService
+  class ParseResultService
     TOP_ADS_SECTION_ID = 'tvcap'
     BOTTOM_ADS_SECTION_ID = 'bottomads'
     ADS_CLASS = 'uEierd'
@@ -10,10 +10,10 @@ module Google
 
     def initialize(html)
       @html = html
-      @doc = Nokogiri::HTML(html)
     end
 
     def call
+      @doc = Nokogiri::HTML(html)
       {
         ads_top_count: ads_top_count,
         ads_page_count: ads_page_count,
@@ -34,7 +34,7 @@ module Google
     end
 
     def ads_page_count
-      doc.css("div[class='#{ADS_CLASS}']").count
+      @ads_page_count ||= @doc.css("div[class='#{ADS_CLASS}']").count
     end
 
     def ads_top_urls
@@ -46,7 +46,7 @@ module Google
     end
 
     def result_count
-      doc.css("div[id='#{SEARCH_SECTION_ID}']").css("div[class='#{SEARCH_RESULT_CLASS}']").count
+      @result_count ||= doc.css("div[id='#{SEARCH_SECTION_ID}']").css("div[class='#{SEARCH_RESULT_CLASS}']").count
     end
 
     def result_urls

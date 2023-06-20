@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WebpageFetchService, type: :service do
+RSpec.describe FetchWebpageService, type: :service do
   describe '#call' do
     context 'when querying a webpage returns success response' do
       it 'returns an HTTParty Response' do
@@ -14,12 +14,12 @@ RSpec.describe WebpageFetchService, type: :service do
       end
     end
 
-    context 'when querying a webpage with User-Agent' do
+    context 'when querying a webpage with Header' do
       it 'returns an HTTParty Response' do
+        headers = { 'Key' => 'value' }
         url = FFaker::Internet.http_url
-        user_agent = FFaker::FreedomIpsum.word
-        WebMock.stub_request(:get, url).with(headers: { 'User-Agent' => user_agent })
-        result = described_class.new(url, user_agent).call
+        WebMock.stub_request(:get, url).with(headers: headers)
+        result = described_class.new(url, headers).call
 
         expect(result).to be_an_instance_of(HTTParty::Response)
       end
@@ -31,7 +31,7 @@ RSpec.describe WebpageFetchService, type: :service do
         WebMock.stub_request(:get, url).to_return(status: 500)
         result = described_class.new(url, nil).call
 
-        expect(result).to be(false)
+        expect(result).to be_nil
       end
     end
   end
