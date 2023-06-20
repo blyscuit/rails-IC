@@ -17,9 +17,10 @@ class CsvUploadForm
     @file = file
     return false unless file && valid?
 
-    ActiveRecord::Base.transaction { keywords.each(&:save) }
+    saved_keywords = []
+    ActiveRecord::Base.transaction { saved_keywords += keywords.each(&:save) }
 
-    errors.empty?
+    errors.empty? ? saved_keywords : false
   end
 
   private
