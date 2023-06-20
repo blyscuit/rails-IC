@@ -1,20 +1,50 @@
 # frozen_string_literal: true
 
+require 'byebug'
+require 'rails_helper'
+
 RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'GET#index' do
-    it 'returns success status' do
-      get api_v1_keywords_path, headers: create_token_header
+    context 'given a logged in user gets theirs keyword' do
+      it 'returns success status' do
+        user = Fabricate(:user)
+        Fabricate.times(3, :keyword, user_id: user.id)
 
-      expect(response).to have_http_status(:success)
+        get api_v1_keywords_path, headers: create_token_header(user)
+
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns three items' do
+        user = Fabricate(:user)
+        Fabricate.times(3, :keyword, user_id: user.id)
+
+        get api_v1_keywords_path, headers: create_token_header(user)
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+        expect(response_body[:data].count).to eq 3
+      end
     end
 
-    it 'returns the valid keywords' do
-      get api_v1_keywords_path, headers: create_token_header
+    context 'given database contains keywords are not belonging to the current user' do
+      it 'returns success status' do
+        user = Fabricate(:user)
+        Fabricate.times(3, :keyword, user_id: user.id)
 
-      keywords = JSON.parse(response.body, symbolize_names: true)[:data]
+        get api_v1_keywords_path, headers: create_token_header
 
-      expect(keywords[0][:attributes][:name]).to eq('First keyword')
-      expect(keywords[1][:attributes][:name]).to eq('Second keyword')
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns an empty array' do
+        user = Fabricate(:user)
+        Fabricate.times(3, :keyword, user_id: user.id)
+
+        get api_v1_keywords_path, headers: create_token_header
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+        expect(response_body[:data].count).to eq 0
+      end
     end
   end
 
