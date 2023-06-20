@@ -7,7 +7,7 @@ RSpec.describe FetchWebpageService, type: :service do
     context 'when querying a webpage returns success response' do
       it 'returns an HTTParty Response' do
         url = FFaker::Internet.http_url
-        WebMock.stub_request(:get, url)
+        stub_request(:get, url)
         result = described_class.new(url, nil).call
 
         expect(result).to be_an_instance_of(HTTParty::Response)
@@ -18,7 +18,7 @@ RSpec.describe FetchWebpageService, type: :service do
       it 'returns an HTTParty Response' do
         headers = { 'Key' => 'value' }
         url = FFaker::Internet.http_url
-        WebMock.stub_request(:get, url).with(headers: headers)
+        stub_request(:get, url).with(headers: headers)
         result = described_class.new(url, headers).call
 
         expect(result).to be_an_instance_of(HTTParty::Response)
@@ -28,7 +28,7 @@ RSpec.describe FetchWebpageService, type: :service do
     context 'when querying a webpage returns 500 error' do
       it 'returns false' do
         url = FFaker::Internet.http_url
-        WebMock.stub_request(:get, url).to_return(status: 500)
+        stub_request(:get, url).to_return(status: 500)
         result = described_class.new(url, nil).call
 
         expect(result).to be_nil
