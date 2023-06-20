@@ -11,7 +11,11 @@ module Api
       end
 
       def create
-        if csv_form.save(params[:file])
+        saved_keywords = csv_form.save(params[:file])
+        if saved_keywords
+          # TODO: Create background job for all keywords
+          Google::SearchKeywordJob.perform_now(saved_keywords.first)
+
           render json: create_success_response
         else
           render_errors(
