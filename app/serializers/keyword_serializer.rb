@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
 class KeywordSerializer < ApplicationSerializer
-  attributes :name
+  attributes :name,
+             :created_at,
+             :updated_at
 end
