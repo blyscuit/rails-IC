@@ -42,6 +42,6 @@ module OAuthHelpers
     application = Fabricate(:application)
     access_token = Fabricate(:access_token, resource_owner_id: user.id, application_id: application.id)
 
-    [{ 'Authorization' => "Bearer #{access_token.token}" }, user]
+    { 'Authorization' => "Bearer #{access_token.token}" }
   end
 end
