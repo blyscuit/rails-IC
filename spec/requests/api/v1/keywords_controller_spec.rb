@@ -58,6 +58,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'POST#index' do
     context 'when CSV file is valid' do
       it 'returns success status' do
+        stub_request(:get, /google.com\/search/)
         params = { 'file' => fixture_file_upload('csv/valid.csv') }
         post api_v1_keywords_path, params: params, headers: create_token_header
 
@@ -65,6 +66,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'saves 10 keywords to the DB' do
+        stub_request(:get, /google.com\/search/)
         params = { 'file' => fixture_file_upload('csv/valid.csv') }
         post api_v1_keywords_path, params: params, headers: create_token_header
 
@@ -72,10 +74,19 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'returns the upload_success meta message' do
+        stub_request(:get, /google.com\/search/)
         params = { 'file' => fixture_file_upload('csv/valid.csv') }
         post api_v1_keywords_path, params: params, headers: create_token_header
 
         expect(JSON.parse(response.body)['meta']).to eq(I18n.t('csv.upload_success'))
+      end
+
+      it 'saves keyword "Apple" with top ads count as 3' do
+        stub_request(:get, /google.com\/search/).to_return(body: file_fixture('html/valid_google.html').read)
+        params = { 'file' => fixture_file_upload('csv/valid.csv') }
+        post api_v1_keywords_path, params: params, headers: create_token_header
+
+        expect(Keyword.where(name: 'Apple').first[:top_ads_count]).to eq(3)
       end
     end
 

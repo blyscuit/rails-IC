@@ -10,7 +10,7 @@ RSpec.describe CsvUploadForm, type: :form do
         form = described_class.new(user)
         saved = form.save(file_fixture('csv/valid.csv'))
 
-        expect(saved).to be(true)
+        expect(saved.count).to eq(10)
       end
 
       it 'saves 10 keywords with the correct user' do

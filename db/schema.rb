@@ -10,16 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_13_043615) do
+ActiveRecord::Schema.define(version: 2023_06_20_095911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "keywords", force: :cascade do |t|
     t.string "name"
+    t.integer "top_ads_count"
+    t.integer "total_ads_count"
+    t.string "ads_links", array: true
+    t.integer "result_count"
+    t.string "result_links", array: true
+    t.integer "total_link_count"
+    t.string "html"
+    t.bigint "source_id"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["source_id"], name: "index_keywords_on_source_id"
     t.index ["user_id"], name: "index_keywords_on_user_id"
   end
 
@@ -51,6 +60,12 @@ ActiveRecord::Schema.define(version: 2023_06_13_043615) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "sources", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -68,6 +83,7 @@ ActiveRecord::Schema.define(version: 2023_06_13_043615) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "keywords", "sources"
   add_foreign_key "keywords", "users"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
 end
