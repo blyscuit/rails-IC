@@ -14,6 +14,7 @@ module Google
 
     def call
       @doc = Nokogiri::HTML(html)
+
       {
         ads_top_count: ads_top_count,
         ads_page_count: ads_page_count,
