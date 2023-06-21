@@ -4,7 +4,7 @@ module Api
   module V1
     class KeywordsController < ApplicationController
       def index
-        keywords = Keyword.where(user_id: current_user.id)
+        keywords = Keyword.where(user: current_user)
         render json: KeywordSerializer.new(keywords).serializable_hash.to_json
       end
 
