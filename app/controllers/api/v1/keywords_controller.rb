@@ -3,8 +3,9 @@
 module Api
   module V1
     class KeywordsController < ApplicationController
+      after_action :verify_policy_scoped, only: :index
       def index
-        keywords = Keyword.where(user: current_user)
+        keywords = policy_scope(Keyword)
         render json: KeywordSerializer.new(keywords).serializable_hash.to_json
       end
 
