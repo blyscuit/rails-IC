@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'byebug'
 require 'rails_helper'
 
 RSpec.describe Api::V1::KeywordsController, type: :request do
@@ -29,7 +28,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
     context 'given database contains keywords are not belonging to the current user' do
       it 'returns success status' do
         user = Fabricate(:user)
-        Fabricate.times(3, :keyword, user_id: user.id)
+        Fabricate(:keyword, user_id: user.id)
 
         get api_v1_keywords_path, headers: create_token_header
 
@@ -38,7 +37,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
       it 'returns an empty array' do
         user = Fabricate(:user)
-        Fabricate.times(3, :keyword, user_id: user.id)
+        Fabricate(:keyword, user_id: user.id)
 
         get api_v1_keywords_path, headers: create_token_header
 
