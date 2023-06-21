@@ -7,14 +7,25 @@ module Google
     BASE_SEARCH_URL = 'https://www.google.com/search'
     HEADERS = { 'User-Agent' => USER_AGENT }.freeze
 
-    def initialize(keyword, lang: 'en')
-      escaped_keyword = CGI.escape(keyword)
-      @url = "#{BASE_SEARCH_URL}?q=#{escaped_keyword}&hl=#{lang}&gl=#{lang}"
+    def initialize(keyword, lang: :en)
+      @keyword = keyword
+      @lang = lang
     end
 
     def call
-      html = FetchWebpageService.new(@url, HEADERS).call
+      html = FetchWebpageService.new(url, HEADERS).call
+
       ParseResultService.new(html.body).call if html
+    end
+
+    private
+
+    attr_reader :keyword, :lang
+
+    def url
+      escaped_keyword = CGI.escape(keyword)
+
+      "#{BASE_SEARCH_URL}?q=#{escaped_keyword}&hl=#{lang}&gl=#{lang}"
     end
   end
 end
