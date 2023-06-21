@@ -4,45 +4,55 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'GET#index' do
-    context 'given a logged in user gets theirs keyword' do
-      it 'returns success status' do
-        user = Fabricate(:user)
-        Fabricate.times(3, :keyword, user_id: user.id)
+    context 'given a logged in user' do
+      context 'given the user query query their own keyword' do
+        it 'returns success status' do
+          user = Fabricate(:user)
+          Fabricate.times(3, :keyword, user: user)
 
-        get api_v1_keywords_path, headers: create_token_header(user)
+          get api_v1_keywords_path, headers: create_token_header(user)
 
-        expect(response).to have_http_status(:success)
+          expect(response).to have_http_status(:success)
+        end
+
+        it 'returns three items' do
+          user = Fabricate(:user)
+          Fabricate.times(3, :keyword, user: user)
+
+          get api_v1_keywords_path, headers: create_token_header(user)
+
+          response_body = JSON.parse(response.body, symbolize_names: true)
+          expect(response_body[:data].count).to eq 3
+        end
       end
 
-      it 'returns three items' do
-        user = Fabricate(:user)
-        Fabricate.times(3, :keyword, user_id: user.id)
+      context 'given the user has no keyword' do
+        it 'returns success status' do
+          user = Fabricate(:user)
+          Fabricate(:keyword, user: user)
 
-        get api_v1_keywords_path, headers: create_token_header(user)
+          get api_v1_keywords_path, headers: create_token_header
 
-        response_body = JSON.parse(response.body, symbolize_names: true)
-        expect(response_body[:data].count).to eq 3
+          expect(response).to have_http_status(:success)
+        end
+
+        it 'returns an empty array' do
+          user = Fabricate(:user)
+          Fabricate(:keyword, user: user)
+
+          get api_v1_keywords_path, headers: create_token_header
+
+          response_body = JSON.parse(response.body, symbolize_names: true)
+          expect(response_body[:data].count).to eq 0
+        end
       end
     end
 
-    context 'given database contains keywords are not belonging to the current user' do
-      it 'returns success status' do
-        user = Fabricate(:user)
-        Fabricate(:keyword, user_id: user.id)
+    context 'given a non-logged in user' do
+      it 'returns an unauthorized error' do
+        get api_v1_keywords_path
 
-        get api_v1_keywords_path, headers: create_token_header
-
-        expect(response).to have_http_status(:success)
-      end
-
-      it 'returns an empty array' do
-        user = Fabricate(:user)
-        Fabricate(:keyword, user_id: user.id)
-
-        get api_v1_keywords_path, headers: create_token_header
-
-        response_body = JSON.parse(response.body, symbolize_names: true)
-        expect(response_body[:data].count).to eq 0
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
