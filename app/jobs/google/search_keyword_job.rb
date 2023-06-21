@@ -5,14 +5,16 @@ module Google
     queue_as :default
 
     def perform(keyword)
-      search_result = Google::SearchService.new(keyword[:name]).call()
+      search_result = Google::SearchService.new(keyword[:name]).call
+      raise Google::Errors::SearchKeywordError unless search_result
+
       update_keyword(keyword, search_result)
     end
 
     private
 
     def update_keyword(keyword, search_result)
-      source = Source.find_or_create_by({ :name => 'Google' })
+      source = Source.find_or_create_by({ name: 'Google' })
       keyword.update(
         top_ads_count: search_result[:ads_top_count],
         total_ads_count: search_result[:ads_page_count],
