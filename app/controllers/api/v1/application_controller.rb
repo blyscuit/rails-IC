@@ -3,6 +3,7 @@
 module Api
   module V1
     class ApplicationController < ActionController::API
+      include Pundit::Authorization
       include ErrorRenderable
 
       before_action :doorkeeper_authorize!
