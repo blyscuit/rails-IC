@@ -17,6 +17,9 @@ ActiveRecord::Schema.define(version: 2023_06_20_095911) do
 
   create_table "keywords", force: :cascade do |t|
     t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "top_ads_count"
     t.integer "total_ads_count"
     t.string "ads_links", array: true
@@ -25,9 +28,6 @@ ActiveRecord::Schema.define(version: 2023_06_20_095911) do
     t.integer "total_link_count"
     t.string "html"
     t.bigint "source_id"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.index ["source_id"], name: "index_keywords_on_source_id"
     t.index ["user_id"], name: "index_keywords_on_user_id"
   end
