@@ -18,7 +18,7 @@ RSpec.describe CsvValidator, type: :model do
     end
   end
 
-  context 'given a file with the number of keywords greater than the LIMIT' do
+  context 'given a file with 1001 keywords' do
     it 'returns wrong_count error' do
       form = CsvValidatorHelper.new(file_fixture('csv/exceed_count.csv'))
       form.validate

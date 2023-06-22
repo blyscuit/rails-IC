@@ -20,7 +20,7 @@ class CsvUploadForm
     saved_keywords = []
     ActiveRecord::Base.transaction { saved_keywords += keywords.each(&:save) }
 
-    errors.empty? ? saved_keywords : false
+    errors.empty?
   end
 
   private
