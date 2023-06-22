@@ -22,6 +22,11 @@ module Api
         end
       end
 
+      def show
+        keyword = Keyword.find_by(id: params[:id])
+        render json: KeywordDetailSerializer.new(keyword).serializable_hash.to_json
+      end
+
       private
 
       def authorize!

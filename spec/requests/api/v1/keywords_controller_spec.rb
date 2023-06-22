@@ -144,4 +144,24 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
     end
   end
+
+  describe 'GET#show' do
+    context 'when CSV file is valid' do
+      it 'returns success status' do
+        stub_request(:get, %r{google.com/search})
+        keyword = Fabricate(:keyword_parsed)
+        get api_v1_keyword_path(:id => keyword.id), headers: create_token_header
+
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns success status' do
+        stub_request(:get, %r{google.com/search})
+        keyword = Fabricate(:keyword_parsed)
+        get api_v1_keyword_path(:id => keyword.id), headers: create_token_header
+
+        expect(JSON.parse(response.body)).to eq('')
+      end
+    end
+  end
 end
