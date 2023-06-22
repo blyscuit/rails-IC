@@ -17,10 +17,10 @@ class CsvUploadForm
     @file = file
     return false unless file && valid?
 
-    ActiveRecord::Base.transaction {
+    ActiveRecord::Base.transaction do
       source = Source.find_or_create_by({ name: source_name })
       keywords(source).each(&:save)
-    }
+    end
 
     errors.empty?
   end
