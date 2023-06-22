@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'GET#index' do
     context 'given a logged in user' do
-      context 'given the user query query their own keyword' do
+      context 'given the user has keywords' do
         it 'returns success status' do
           user = Fabricate(:user)
           Fabricate.times(3, :keyword, user: user)
@@ -28,8 +28,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
       context 'given the user has no keyword' do
         it 'returns success status' do
-          user = Fabricate(:user)
-          Fabricate(:keyword, user: user)
+          Fabricate(:keyword)
 
           get api_v1_keywords_path, headers: create_token_header
 
@@ -37,8 +36,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         end
 
         it 'returns an empty array' do
-          user = Fabricate(:user)
-          Fabricate(:keyword, user: user)
+          Fabricate(:keyword)
 
           get api_v1_keywords_path, headers: create_token_header
 
