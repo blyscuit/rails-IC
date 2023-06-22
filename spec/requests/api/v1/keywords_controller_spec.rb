@@ -96,7 +96,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
           params = { 'file' => fixture_file_upload('csv/valid.csv') }
           post api_v1_keywords_path, params: params, headers: create_token_header
-        rescue Google::Errors::SearchKeywordError
 
           expect(Keyword.where(name: 'Apple').first[:ads_top_count]).to be_nil
         end

@@ -3,13 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe CsvUploadForm, type: :form do
+  SOURCE_NAME = 'source_name'
   describe '#save' do
     context 'given a valid file of 10 keywords' do
       it 'can save' do
         stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
-        saved = form.save(file_fixture('csv/valid.csv'))
+        saved = form.save(file_fixture('csv/valid.csv'), SOURCE_NAME)
 
         expect(saved).to be(true)
       end
@@ -18,7 +19,7 @@ RSpec.describe CsvUploadForm, type: :form do
         stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
-        form.save(file_fixture('csv/valid.csv'))
+        form.save(file_fixture('csv/valid.csv'), SOURCE_NAME)
 
         expect(keyword_for_user(user).count).to eq(10)
       end
@@ -27,10 +28,21 @@ RSpec.describe CsvUploadForm, type: :form do
         stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
-        form.save(file_fixture('csv/valid.csv'))
+        form.save(file_fixture('csv/valid.csv'), SOURCE_NAME)
         csv_entries = CSV.read(File.open(form.file)).map { |str| str.join(',') }
 
         expect(csv_entries).to match_array(keyword_for_user(user))
+      end
+
+      it 'saves 10 keywords with source from the input' do
+        stub_request(:get, %r{google.com/search})
+        user = Fabricate(:user)
+        form = described_class.new(user)
+        form.save(file_fixture('csv/valid.csv'), SOURCE_NAME)
+        csv_entries = CSV.read(File.open(form.file)).map { |str| str.join(',') }
+        source = Source.where(:name => SOURCE_NAME).first
+
+        expect(Keyword.where(:source => source).count).to eq(10)
       end
     end
 
@@ -39,7 +51,7 @@ RSpec.describe CsvUploadForm, type: :form do
         user = Fabricate(:user)
         form = described_class.new(user)
 
-        expect { form.save(nil) }.not_to change(Keyword, :count)
+        expect { form.save(nil, SOURCE_NAME) }.not_to change(Keyword, :count)
       end
     end
 
@@ -47,7 +59,7 @@ RSpec.describe CsvUploadForm, type: :form do
       it 'returns a wrong_count error' do
         user = Fabricate(:user)
         form = described_class.new(user)
-        form.save(file_fixture('csv/exceed_count.csv'))
+        form.save(file_fixture('csv/exceed_count.csv'), SOURCE_NAME)
 
         expect(form.errors.full_messages).to include(I18n.t('csv.validation.wrong_count'))
       end
@@ -57,7 +69,7 @@ RSpec.describe CsvUploadForm, type: :form do
       it 'returns the wrong_type error' do
         user = Fabricate(:user)
         form = described_class.new(user)
-        form.save(file_fixture('csv/wrong_type.txt'))
+        form.save(file_fixture('csv/wrong_type.txt'), SOURCE_NAME)
 
         expect(form.errors.full_messages).to include(I18n.t('csv.validation.wrong_type'))
       end
@@ -68,7 +80,7 @@ RSpec.describe CsvUploadForm, type: :form do
         stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
-        form.save(file_fixture('csv/blank.csv'))
+        form.save(file_fixture('csv/blank.csv'), SOURCE_NAME)
 
         expect(keyword_for_user(user).count).to eq(9)
       end

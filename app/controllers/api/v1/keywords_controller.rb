@@ -11,7 +11,7 @@ module Api
       end
 
       def create
-        if csv_form.save(params[:file])
+        if csv_form.save(params[:file], source_name(params))
           render json: create_success_response
         else
           render_errors(
@@ -36,6 +36,12 @@ module Api
         {
           meta: I18n.t('csv.upload_success')
         }
+      end
+
+      def source_name(params)
+        # TODO: Read source_name from parameter
+        
+        'Google'
       end
     end
   end
