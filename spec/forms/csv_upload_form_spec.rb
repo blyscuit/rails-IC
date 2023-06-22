@@ -6,14 +6,16 @@ RSpec.describe CsvUploadForm, type: :form do
   describe '#save' do
     context 'given a valid file of 10 keywords' do
       it 'can save' do
+        stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
         saved = form.save(file_fixture('csv/valid.csv'))
 
-        expect(saved.count).to eq(10)
+        expect(saved).to be(true)
       end
 
       it 'saves 10 keywords with the correct user' do
+        stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'))
@@ -22,6 +24,7 @@ RSpec.describe CsvUploadForm, type: :form do
       end
 
       it 'saves same 10 keywords from the file' do
+        stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'))
@@ -62,6 +65,7 @@ RSpec.describe CsvUploadForm, type: :form do
 
     context 'given a file with 9 keywords and 1 blank' do
       it 'saves 9 keywords with the correct user' do
+        stub_request(:get, %r{google.com/search})
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/blank.csv'))

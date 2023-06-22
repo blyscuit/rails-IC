@@ -20,11 +20,11 @@ ActiveRecord::Schema.define(version: 2023_06_20_095911) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "top_ads_count"
-    t.integer "total_ads_count"
-    t.string "ads_links", array: true
+    t.integer "ads_top_count"
+    t.integer "ads_page_count"
+    t.string "ads_top_urls", array: true
     t.integer "result_count"
-    t.string "result_links", array: true
+    t.string "result_urls", array: true
     t.integer "total_link_count"
     t.string "html"
     t.bigint "source_id"
