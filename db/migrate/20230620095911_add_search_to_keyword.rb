@@ -9,6 +9,7 @@ class AddSearchToKeyword < ActiveRecord::Migration[7.0]
       t.integer :total_link_count, null: true
       t.string :html, null: true
       t.references :source, null: true, foreign_key: true
+      t.integer :status, default: 0, null: false
     end
   end
 end
