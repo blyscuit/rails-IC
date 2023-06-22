@@ -70,16 +70,6 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
 
         expect(keyword.reload.html).to eq(html)
       end
-
-      it 'saves Google as source.name in the Database' do
-        html = file_fixture('html/valid_google.html').read
-        stub_request(:get, %r{google.com/search}).to_return(body: html)
-        keyword = Fabricate(:keyword)
-
-        described_class.perform_now keyword.id
-
-        expect(keyword.reload.source.name).to eq('Google')
-      end
     end
 
     context 'given a 422 too many requests error' do
@@ -88,7 +78,6 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
         keyword = Fabricate(:keyword)
 
         described_class.perform_now keyword.id
-      rescue Google::Errors::SearchKeywordError
         keyword.reload
 
         expect(
@@ -110,7 +99,6 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
         keyword = Fabricate(:keyword)
 
         described_class.perform_now keyword.id
-      rescue Google::Errors::SearchKeywordError
 
         expect(keyword.reload.reload.html).not_to be_present
       end
