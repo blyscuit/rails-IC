@@ -26,6 +26,15 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           response_body = JSON.parse(response.body, symbolize_names: true)
           expect(response_body[:data].count).to eq 3
         end
+
+        it 'returns the correct meta data' do
+          user = Fabricate(:user)
+          Fabricate.times(3, :keyword, user: user)
+          get api_v1_keywords_path, params: { page: 1, per_page: 2 }, headers: create_token_header(user)
+          response_body = JSON.parse(response.body, symbolize_names: true)
+
+          expect(response_body[:meta]).to eq(page: 1, per_page: 2, total_items: 3)
+        end
       end
 
       context 'given the user has no keyword' do
@@ -44,6 +53,14 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
           response_body = JSON.parse(response.body, symbolize_names: true)
           expect(response_body[:data].count).to eq 0
+        end
+
+        it 'returns the correct meta data' do
+          Fabricate(:keyword)
+          get api_v1_keywords_path, params: { page: 1, per_page: 2 }, headers: create_token_header
+          response_body = JSON.parse(response.body, symbolize_names: true)
+
+          expect(response_body[:meta]).to eq(page: 1, per_page: 2, total_items: 0)
         end
       end
     end
