@@ -9,7 +9,7 @@ class Keyword < ApplicationRecord
   after_create_commit :perform_search
 
   private
-  
+
   def perform_search
     # TODO: Perform "later"
     Google::SearchKeywordJob.perform_now id
