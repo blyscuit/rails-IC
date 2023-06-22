@@ -81,12 +81,25 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         expect(JSON.parse(response.body)['meta']).to eq(I18n.t('csv.upload_success'))
       end
 
-      it 'saves keyword "Apple" with top ads count as 3' do
-        stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-        params = { 'file' => fixture_file_upload('csv/valid.csv') }
-        post api_v1_keywords_path, params: params, headers: create_token_header
+      context 'when Google search is successfully fetched' do
+        it 'saves keyword "Apple" with top ads count as 3' do
+          stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
+          params = { 'file' => fixture_file_upload('csv/valid.csv') }
+          post api_v1_keywords_path, params: params, headers: create_token_header
 
-        expect(Keyword.where(name: 'Apple').first[:top_ads_count]).to eq(3)
+          expect(Keyword.where(name: 'Apple').first[:top_ads_count]).to eq(3)
+        end
+      end
+
+      context 'when Google search returns too many attemps status 422 ' do
+        it 'does not saves information for "Apple"' do
+          stub_request(:get, %r{google.com/search}).to_return(status: 422)
+          params = { 'file' => fixture_file_upload('csv/valid.csv') }
+          post api_v1_keywords_path, params: params, headers: create_token_header
+        rescue Google::Errors::SearchKeywordError
+
+          expect(Keyword.where(name: 'Apple').first[:top_ads_count]).to eq(nil)
+        end
       end
     end
 
