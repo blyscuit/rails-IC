@@ -16,7 +16,7 @@ module Google
       if search_result
         keyword.update search_result.merge(status: 1)
       else
-        keyword.update({ :status => 2 })
+        keyword.update({ status: 2 })
       end
     end
   end

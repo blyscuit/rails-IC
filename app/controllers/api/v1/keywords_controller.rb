@@ -38,9 +38,9 @@ module Api
         }
       end
 
-      def source_name(params)
+      def source_name(_params)
         # TODO: Read source_name from parameter
-        
+
         'Google'
       end
     end

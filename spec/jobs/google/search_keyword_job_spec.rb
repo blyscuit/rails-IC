@@ -112,7 +112,6 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
 
         described_class.perform_now keyword_id
 
-
         expect(described_class).to have_received(:perform_now).with(keyword_id).exactly(:once)
       end
     end
