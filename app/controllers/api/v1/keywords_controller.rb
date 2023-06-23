@@ -26,12 +26,13 @@ module Api
         keyword = Keyword.find_by(user: current_user, id: params[:id])
 
         if keyword
-          render json: KeywordDetailSerializer.new(keyword).serializable_hash.to_json
+          options = { :include => [:source] }
+          render json: KeywordDetailSerializer.new(keyword, options).serializable_hash.to_json
         else
           render_errors(
             details: [I18n.t('keyword.not_found')],
             status: :not_found
-          )
+          ) 
         end
       end
 

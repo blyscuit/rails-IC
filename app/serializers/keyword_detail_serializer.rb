@@ -9,5 +9,5 @@ class KeywordDetailSerializer < ApplicationSerializer
   attributes :result_urls
   attributes :total_link_count
   attributes :html
-  attributes :source
+  has_one :source
 end

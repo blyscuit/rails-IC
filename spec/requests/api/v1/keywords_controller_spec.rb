@@ -164,6 +164,15 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
         expect(JSON.parse(response.body)['data']['attributes']['ads_page_count']).to eq(keyword.reload.ads_page_count)
       end
+
+      it 'returns json with source as an included relationship' do
+        stub_request(:get, %r{google.com/search})
+        keyword = Fabricate(:keyword_parsed)
+        user = keyword.user
+        get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
+
+        expect(JSON.parse(response.body)['included'].find { |included| included['type'] == 'source' }['attributes']['name']).to eq(keyword.reload.source.name)
+      end
     end
 
     context 'when keyword does not belonged to the user' do
