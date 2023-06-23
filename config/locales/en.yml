@@ -36,3 +36,5 @@ en:
     validation:
       wrong_count: 'The CSV file should contain between 1 and 1000 keywords'
       wrong_type: 'Please ensure the provided file type is CSV'
+  keyword:
+    not_found: "Keyword not found"
