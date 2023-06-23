@@ -5,13 +5,19 @@ module Api
     module ErrorRenderable
       private
 
-      def render_error(detail, source: nil, status: :unprocessable_entity)
-        error = build_error(detail: detail, source: source)
-        render_errors [error], status
+      def build_errors(details:, source: nil, meta: nil, code: nil)
+        {
+          source: { parameter: source }.compact,
+          details: details,
+          code: code,
+          meta: meta
+        }.compact_blank!
       end
 
-      def render_errors(jsonapi_errors, status = :unprocessable_entity)
-        render json: { errors: jsonapi_errors }, status: status
+      def render_errors(details:, source: nil, meta: nil, status: :unprocessable_entity, code: nil)
+        errors = build_errors(details: details, source: source, meta: meta, code: code)
+
+        render json: { errors: errors }, status: status
       end
     end
   end

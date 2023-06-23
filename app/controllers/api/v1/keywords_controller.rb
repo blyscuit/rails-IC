@@ -23,8 +23,16 @@ module Api
       end
 
       def show
-        keyword = Keyword.find_by(id: params[:id])
-        render json: KeywordDetailSerializer.new(keyword).serializable_hash.to_json
+        keyword = Keyword.find_by(user: current_user, id: params[:id])
+
+        if keyword
+          render json: KeywordDetailSerializer.new(keyword).serializable_hash.to_json
+        else
+          render_errors(
+            details: [I18n.t('keyword.not_found')],
+            status: :not_found
+          )
+        end
       end
 
       private
