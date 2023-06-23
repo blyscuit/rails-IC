@@ -167,17 +167,45 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       it 'returns success status' do
         stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
-        get api_v1_keyword_path(:id => keyword.id), headers: create_token_header
+        user = keyword.user
+        get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
 
         expect(response).to have_http_status(:success)
       end
 
-      it 'returns success status' do
+      it 'returns same ads_page_count as the keyword' do
         stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
-        get api_v1_keyword_path(:id => keyword.id), headers: create_token_header
+        user = keyword.user
+        get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
 
-        expect(JSON.parse(response.body)).to eq('')
+        expect(JSON.parse(response.body)['data']['attributes']['ads_page_count']).to eq(keyword.reload.ads_page_count)
+      end
+    end
+
+    context 'when keyword does not belonged to the user' do
+      it 'returns not found status' do
+        stub_request(:get, %r{google.com/search})
+        keyword = Fabricate(:keyword_parsed)
+        get api_v1_keyword_path(keyword.id), headers: create_token_header
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns the keyword.not_found error' do
+        stub_request(:get, %r{google.com/search})
+        keyword = Fabricate(:keyword_parsed)
+        get api_v1_keyword_path(keyword.id), headers: create_token_header
+
+        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('keyword.not_found'))
+      end
+    end
+
+    context 'when there is no keyword' do
+      it 'returns not found status' do
+        get api_v1_keyword_path(0), headers: create_token_header
+
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
