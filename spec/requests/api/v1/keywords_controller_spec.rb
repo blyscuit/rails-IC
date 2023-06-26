@@ -60,7 +60,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'POST#index' do
     context 'when CSV file is valid' do
       it 'returns success status' do
-        stub_request(:get, %r{google.com/search})
         params = { 'file' => fixture_file_upload('csv/valid.csv') }
         post api_v1_keywords_path, params: params, headers: create_token_header
 
@@ -68,7 +67,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'saves 10 keywords to the DB' do
-        stub_request(:get, %r{google.com/search})
         params = { 'file' => fixture_file_upload('csv/valid.csv') }
         post api_v1_keywords_path, params: params, headers: create_token_header
 
@@ -76,7 +74,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'returns the upload_success meta message' do
-        stub_request(:get, %r{google.com/search})
         params = { 'file' => fixture_file_upload('csv/valid.csv') }
         post api_v1_keywords_path, params: params, headers: create_token_header
 
