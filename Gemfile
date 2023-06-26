@@ -86,6 +86,7 @@ group :test do
   gem 'vcr' # Gem for recording test suite's HTTP interactions
   gem 'timecop' # Gem for time travel
   gem 'rails-controller-testing' # Gem that allow to use assigns as well ass assert_template
+  gem 'pundit-matchers' # Rspec matcher for testing Pundit
 end
 
 group :production do
