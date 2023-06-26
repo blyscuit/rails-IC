@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 2023_06_20_095911) do
     t.string "html"
     t.string "status", default: "in_progress", null: false
     t.bigint "source_id"
-    t.integer "status", default: 0, null: false
     t.index ["source_id"], name: "index_keywords_on_source_id"
     t.index ["user_id"], name: "index_keywords_on_user_id"
   end

@@ -25,6 +25,7 @@ module Api
       def show
         keyword = policy_scope(Keyword).find(params[:id])
         options = { include: [:source] }
+
         render json: KeywordDetailSerializer.new(keyword, options).serializable_hash.to_json
       rescue ActiveRecord::RecordNotFound
         render_errors(
