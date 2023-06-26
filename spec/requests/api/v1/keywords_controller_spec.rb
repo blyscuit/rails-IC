@@ -217,5 +217,13 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context 'given a non-logged in user' do
+      it 'returns an unauthorized error' do
+        get api_v1_keyword_path(0)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end
