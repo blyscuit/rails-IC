@@ -103,7 +103,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
             post api_v1_keywords_path, params: params, headers: create_token_header
           end
 
-          expect(Keyword.where(name: 'Apple').first[:ads_top_count]).to be_nil
+          expect(Keyword.where(name: 'Apple').first[:ads_top_count]).to eq(0)
         end
       end
     end
