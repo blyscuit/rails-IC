@@ -15,6 +15,10 @@ class KeywordPolicy < ApplicationPolicy
     user_valid?
   end
 
+  def show?
+    user_valid?
+  end
+
   private
 
   def user_valid?
