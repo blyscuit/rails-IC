@@ -20,13 +20,14 @@ ActiveRecord::Schema.define(version: 2023_06_20_095911) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "ads_top_count"
-    t.integer "ads_page_count"
+    t.integer "ads_top_count", default: 0, null: false
+    t.integer "ads_page_count", default: 0, null: false
     t.string "ads_top_urls", array: true
-    t.integer "result_count"
+    t.integer "result_count", default: 0, null: false
     t.string "result_urls", array: true
-    t.integer "total_link_count"
+    t.integer "total_link_count", default: 0, null: false
     t.string "html"
+    t.string "status", default: "in_progress", null: false
     t.bigint "source_id"
     t.index ["source_id"], name: "index_keywords_on_source_id"
     t.index ["user_id"], name: "index_keywords_on_user_id"
