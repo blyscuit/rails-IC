@@ -11,7 +11,11 @@ class Keyword < ApplicationRecord
   private
 
   def perform_search
-    # TODO: Perform "later"
-    Google::SearchKeywordJob.perform_now id
+    # TODO: Perform "later" for all env
+    if ENV['RAILS_ENV'] == 'test'
+      Google::SearchKeywordJob.perform_later id
+    else
+      Google::SearchKeywordJob.perform_now id
+    end
   end
 end
