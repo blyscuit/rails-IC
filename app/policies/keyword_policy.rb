@@ -18,6 +18,6 @@ class KeywordPolicy < ApplicationPolicy
   private
 
   def user_valid?
-    !user.id.nil? && !user.email.nil?
+    user && !user.id.nil? && !user.email.nil?
   end
 end
