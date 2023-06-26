@@ -27,7 +27,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           expect(response_body[:data].count).to eq 3
         end
 
-        it 'returns the correct meta data' do
+        it 'returns metadata with page = 1, per_page = 2 and total_items = 3' do
           user = Fabricate(:user)
           Fabricate.times(3, :keyword, user: user)
           get api_v1_keywords_path, params: { page: 1, per_page: 2 }, headers: create_token_header(user)
@@ -55,7 +55,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           expect(response_body[:data].count).to eq 0
         end
 
-        it 'returns the correct meta data' do
+        it 'returns metadata with page = 1, per_page = 2 and total_items = 0' do
           Fabricate(:keyword)
           get api_v1_keywords_path, params: { page: 1, per_page: 2 }, headers: create_token_header
           response_body = JSON.parse(response.body, symbolize_names: true)
