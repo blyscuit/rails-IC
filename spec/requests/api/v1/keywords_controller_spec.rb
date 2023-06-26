@@ -148,7 +148,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
   describe 'GET#show' do
     context 'when CSV file is valid' do
       it 'returns success status' do
-        stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
         user = keyword.user
         get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
@@ -157,7 +156,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'returns same ads_page_count as the keyword' do
-        stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
         user = keyword.user
         get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
@@ -166,7 +164,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'returns json with source as an included relationship' do
-        stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
         user = keyword.user
         get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
@@ -177,7 +174,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
     context 'when keyword does not belonged to the user' do
       it 'returns not found status' do
-        stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
         get api_v1_keyword_path(keyword.id), headers: create_token_header
 
@@ -185,7 +181,6 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
 
       it 'returns the keyword.not_found error' do
-        stub_request(:get, %r{google.com/search})
         keyword = Fabricate(:keyword_parsed)
         get api_v1_keyword_path(keyword.id), headers: create_token_header
 
