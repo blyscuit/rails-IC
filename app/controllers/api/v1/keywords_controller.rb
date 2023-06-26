@@ -3,7 +3,8 @@
 module Api
   module V1
     class KeywordsController < ApplicationController
-      after_action :verify_policy_scoped, only: :index
+      before_action :authorize!
+
       def index
         keywords = policy_scope(Keyword)
         render json: KeywordSerializer.new(keywords).serializable_hash.to_json
@@ -22,6 +23,10 @@ module Api
       end
 
       private
+
+      def authorize!
+        authorize :keyword
+      end
 
       def csv_form
         @csv_form ||= CsvUploadForm.new(current_user)

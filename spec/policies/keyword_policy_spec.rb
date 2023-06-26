@@ -24,6 +24,30 @@ RSpec.describe KeywordPolicy, type: :request do
           expect(scope.to_a).to be_empty
         end
       end
+
+      context 'given the user is a keyword owner' do
+        it 'permits :create, :index' do
+          user = Fabricate(:user)
+          keyword = Fabricate(:keyword, user: user)
+
+          policy = described_class.new(user, keyword)
+
+          expect(policy).to permit_action(:create)
+          expect(policy).to permit_action(:index)
+        end
+      end
+    end
+
+    context 'given the user is an anonymous user' do
+      it 'does NOT permit :create, :index' do
+        anonymous_user = NullUser.new
+        keyword = Fabricate(:keyword)
+
+        policy = described_class.new(anonymous_user, keyword)
+
+        expect(policy).not_to permit_action(:create)
+        expect(policy).not_to permit_action(:index)
+      end
     end
   end
 end
