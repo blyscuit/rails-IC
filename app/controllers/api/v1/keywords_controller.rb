@@ -23,17 +23,14 @@ module Api
       end
 
       def show
-        keyword = Keyword.find_by(user: current_user, id: params[:id])
-
-        if keyword
-          options = { :include => [:source] }
-          render json: KeywordDetailSerializer.new(keyword, options).serializable_hash.to_json
-        else
-          render_errors(
-            details: [I18n.t('keyword.not_found')],
-            status: :not_found
-          ) 
-        end
+        keyword = policy_scope(Keyword).find(params[:id])
+        options = { include: [:source] }
+        render json: KeywordDetailSerializer.new(keyword, options).serializable_hash.to_json
+      rescue ActiveRecord::RecordNotFound
+        render_errors(
+          details: [I18n.t('keyword.not_found')],
+          status: :not_found
+        )
       end
 
       private
