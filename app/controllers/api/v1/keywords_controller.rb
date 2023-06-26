@@ -3,12 +3,11 @@
 module Api
   module V1
     class KeywordsController < ApplicationController
-      include Pagy::Backend
       before_action :authorize!
 
       def index
-        render json: KeywordSerializer.new(keywords, meta: meta_from_pagy(pagy))
-        pagy, keywords = pagy(policy_scope(Keyword), pagination_params)
+        pagination, keywords = paginated_authorized(Keyword)
+        render json: KeywordSerializer.new(keywords, meta: meta_from_pagination(pagination))
       end
 
       def create
