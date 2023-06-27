@@ -15,6 +15,8 @@ module Google
         keyword.update search_result.merge(status: :parsed)
       else
         keyword.update({ status: :failed })
+
+        raise Google::Errors::SearchKeywordError unless search_result
       end
     end
   end
