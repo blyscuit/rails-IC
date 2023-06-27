@@ -88,6 +88,7 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
 
         described_class.perform_now keyword.id
         keyword.reload
+      rescue Google::Errors::SearchKeywordError
 
         expect(
           [
@@ -112,6 +113,7 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
         keyword = Fabricate(:keyword)
 
         described_class.perform_now keyword.id
+      rescue Google::Errors::SearchKeywordError
 
         expect(keyword.reload.status).to eq('failed')
       end
@@ -121,6 +123,7 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
         keyword = Fabricate(:keyword)
 
         described_class.perform_now keyword.id
+      rescue Google::Errors::SearchKeywordError
 
         expect(keyword.reload.reload.html).not_to be_present
       end
@@ -133,8 +136,18 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
         allow(described_class).to receive(:perform_now)
 
         described_class.perform_now keyword_id
+      rescue Google::Errors::SearchKeywordError
 
         expect(described_class).to have_received(:perform_now).with(keyword_id).exactly(:once)
+      end
+
+      it 'raises SearchKeywordError' do
+        stub_request(:get, %r{google.com/search}).to_return(status: 422)
+        keyword = Fabricate(:keyword)
+
+        expect do
+          described_class.perform_now keyword.id
+        end.to raise_error(Google::Errors::SearchKeywordError)
       end
     end
   end
