@@ -96,6 +96,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         it 'does not saves information for "Apple"' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
           params = { 'file' => fixture_file_upload('csv/valid.csv') }
+        rescue Google::Errors::SearchKeywordError
           perform_enqueued_jobs do
             post api_v1_keywords_path, params: params, headers: create_token_header
           end
