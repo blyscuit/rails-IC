@@ -9,7 +9,7 @@ RSpec.describe Google::SearchService, type: :service do
         headers = {
           'User-Agent' =>
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '\
-          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36'
+          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
         }
         stub_request(:get, 'https://www.google.com/search?gl=en&hl=en&q=vpn')
           .with(headers: headers)
