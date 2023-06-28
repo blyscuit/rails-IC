@@ -68,7 +68,7 @@ module Bing
 
     def result_urls
       parsed_html.css("ol[id='#{SEARCH_RESULT_CONTAINER_ID}']")
-                 .css("li[class='#{SEARCH_RESULT_CLASS}']")
+                 .css("li[class*='#{SEARCH_RESULT_CLASS}']")
                  .css('h2>a')
                  .filter_map { |element| element['href'] }
     end
