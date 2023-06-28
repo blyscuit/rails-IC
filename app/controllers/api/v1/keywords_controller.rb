@@ -45,10 +45,8 @@ module Api
         }
       end
 
-      def source_name(_params)
-        # TODO: Read source_name from parameter
-
-        'Google'
+      def source_name(params)
+        params[:search_service]
       end
     end
   end

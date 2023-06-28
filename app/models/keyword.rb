@@ -11,6 +11,5 @@ class Keyword < ApplicationRecord
   private
 
   def perform_search
-    Google::SearchKeywordJob.perform_later id
-  end
+      SearchKeywordJob.perform_later id
 end
