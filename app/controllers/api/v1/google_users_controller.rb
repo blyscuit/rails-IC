@@ -7,18 +7,20 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: %i[create]
 
       def create
-        g = ExternalAuth::GoogleAuth.new(params[:code])
-        data = g.get_user!
-        if data.present?
-        user = User.new(email: data['email'], password: data['sub'], login_type: :google)
-          if user.save
-            render json: 'Success'
-          else
-            render(json: { error: user.errors.full_messages }, status: 422)
-          end
-        else
-          render(json: { error: 'Invalid request' }, status: 422)
-        end
+        google_auth_service = ExternalAuth::GoogleAuth.new(params[:code])
+        data = google_auth_service.get_user
+        render_errors(
+          details: I18n.t('authetication.generic_error'),
+          status: :unprocessable_entity
+        ) unless data
+
+        user = User.new(email: data[:email], password: data[:sub], login_type: :google)
+        render_errors(
+          details: user.errors.full_messages,
+          status: :unprocessable_entity
+        ) unless user.save
+
+        render success: true, status: :login
       end
     end
   end
