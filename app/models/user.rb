@@ -14,4 +14,6 @@ class User < ApplicationRecord
   end
 
   has_many :keywords, inverse_of: :user, dependent: :destroy
+
+  enum login_type: { email: 'email', google: 'google' }
 end
