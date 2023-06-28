@@ -2,29 +2,26 @@
 
 module Bing
   class SearchService
-    USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '\
-                 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
     BASE_SEARCH_URL = 'https://www.bing.com/search'
-    HEADERS = { 'User-Agent' => USER_AGENT }.freeze
+    REQUIRED_PARAMS = '&form=QBLH'
 
-    def initialize(keyword)
-      @keyword = keyword
+    def initialize(keyword_name)
+      @keyword_name = keyword_name
     end
 
     def call
-      html = FetchWebpageService.new(url, HEADERS).call
+      html = FetchWebpageService.new(url).call
 
       ParseResultService.new(html.body).call if html
     end
 
     private
 
-    attr_reader :keyword
+    attr_reader :keyword_name
 
     def url
-      escaped_keyword = CGI.escape(keyword)
-      # I found out without form=QBLH Bing will not return ads
-      "#{BASE_SEARCH_URL}?q=#{escaped_keyword}&form=QBLH"
+      escaped_keyword_name = CGI.escape(keyword_name)
+      "#{BASE_SEARCH_URL}?q=#{escaped_keyword_name}#{REQUIRED_PARAMS}"
     end
   end
 end
