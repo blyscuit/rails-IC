@@ -4,6 +4,7 @@ Fabricator(:keyword) do
   id { FFaker::Identification.ssn }
   name { FFaker::FreedomIpsum.word }
   user { Fabricate(:user) }
+  source { Fabricate(:source) }
 end
 
 Fabricator(:keyword_parsed, from: :keyword) do

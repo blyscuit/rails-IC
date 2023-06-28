@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CsvUploadForm, type: :form do
   describe '#save' do
-    context 'given a valid file of 10 keywords' do
+    context 'given a valid file of 11 keywords' do
       it 'can save' do
         user = Fabricate(:user)
         form = described_class.new(user)
@@ -13,15 +13,15 @@ RSpec.describe CsvUploadForm, type: :form do
         expect(saved).to be(true)
       end
 
-      it 'saves 10 keywords with the correct user' do
+      it 'saves 11 keywords with the correct user' do
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'), '')
 
-        expect(keyword_for_user(user).count).to eq(10)
+        expect(keyword_for_user(user).count).to eq(11)
       end
 
-      it 'saves same 10 keywords from the file' do
+      it 'saves same 11 keywords from the file' do
         user = Fabricate(:user)
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'), '')
@@ -30,13 +30,13 @@ RSpec.describe CsvUploadForm, type: :form do
         expect(csv_entries).to match_array(keyword_for_user(user))
       end
 
-      it 'saves 10 keywords with source from the input' do
+      it 'saves 11 keywords with source from the input' do
         user = Fabricate(:user)
         source = Fabricate(:source)
         form = described_class.new(user)
         form.save(file_fixture('csv/valid.csv'), source.name)
 
-        expect(Keyword.where(source: source).count).to eq(10)
+        expect(Keyword.where(source: source).count).to eq(11)
       end
     end
 
