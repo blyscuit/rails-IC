@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 class FetchWebpageService
-  def initialize(url, headers)
+  USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '\
+               'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+  HEADERS = { 'User-Agent' => USER_AGENT }.freeze
+
+  def initialize(url)
     @uri = URI(url)
-    @headers = headers
   end
 
   def call
-    result = HTTParty.get(@uri, headers: @headers)
+    result = HTTParty.get(@uri, headers: HEADERS)
 
     return unless valid_result? result
 

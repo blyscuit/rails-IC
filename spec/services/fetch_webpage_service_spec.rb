@@ -8,18 +8,7 @@ RSpec.describe FetchWebpageService, type: :service do
       it 'returns an HTTParty Response' do
         url = FFaker::Internet.http_url
         stub_request(:get, url)
-        result = described_class.new(url, nil).call
-
-        expect(result).to be_an_instance_of(HTTParty::Response)
-      end
-    end
-
-    context 'when querying a webpage with Header' do
-      it 'returns an HTTParty Response' do
-        headers = { 'Key' => 'value' }
-        url = FFaker::Internet.http_url
-        stub_request(:get, url).with(headers: headers)
-        result = described_class.new(url, headers).call
+        result = described_class.new(url).call
 
         expect(result).to be_an_instance_of(HTTParty::Response)
       end
@@ -29,7 +18,7 @@ RSpec.describe FetchWebpageService, type: :service do
       it 'returns nil' do
         url = FFaker::Internet.http_url
         stub_request(:get, url).to_return(status: 500)
-        result = described_class.new(url, nil).call
+        result = described_class.new(url).call
 
         expect(result).to be_nil
       end
