@@ -46,7 +46,7 @@ module Api
       end
 
       def source_name(params)
-        params[:search_service]
+        params[:source]
       end
     end
   end
