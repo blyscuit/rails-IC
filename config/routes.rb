@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       resources :keywords, only: [:index, :create, :show]
       resources :tokens, only: [:create]
       resources :registrations, only: [:create]
+      resources :google_users, only: [:create]
     end
   end
 
