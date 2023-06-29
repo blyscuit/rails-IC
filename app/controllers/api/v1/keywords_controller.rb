@@ -23,7 +23,7 @@ module Api
       end
 
       def show
-        keyword = policy_scope(Keyword).find(params[:id])
+        keyword = raw_resources(Keyword).find(params[:id])
         options = { include: [:source] }
 
         render json: KeywordDetailSerializer.new(keyword, options).serializable_hash.to_json
