@@ -10,12 +10,18 @@ module Api
           if @user.persisted?
             render_success
           else
-            render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+          render_errors(
+            details: @user.errors.full_messages,
+            status: :unprocessable_entity
+          )
           end
         end
 
         def failure
-          render json: { errors: failure_message }, status: :unprocessable_entity
+          render_errors(
+            details: [failure_message],
+            status: :unprocessable_entity
+          )
         end
 
         private
@@ -26,6 +32,7 @@ module Api
 
         def render_success
           # TODO: Return JWT token
+
           render json: { success: true }
         end
       end
