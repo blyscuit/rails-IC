@@ -6,23 +6,22 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: %i[create]
 
       def create
-        return render_errors(
-          details: I18n.t('authetication.generic_error'),
-          status: :bad_request
-        ) unless params[:code]
-        data = ExternalAuth::FetchGoogleTokenService.new(params[:code]).call
-        return render_errors(
-          details: I18n.t('authetication.generic_error'),
-          status: :unprocessable_entity
-        ) unless data
+        data = ExternalAuth::FetchGoogleTokenService.new(create_params).call
+        # return render_errors(
+        #   details: I18n.t('authetication.generic_error'),
+        #   status: :unprocessable_entity
+        # ) unless data
 
-        user = User.new(email: data[:email], password: data[:sub], login_type: :google)
-        return render_errors(
-          details: user.errors.full_messages,
-          status: :unprocessable_entity
-        ) unless user.save
+        user = User.new(email: data[:email], password: Devise.friendly_token, sub: data[:sub], login_type: :google)
+        user.save!
 
         render success: true, status: :created
+      end
+
+      private
+
+      def create_params
+        params.require(:code)
       end
     end
   end

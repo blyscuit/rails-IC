@@ -13,6 +13,11 @@ class User < ApplicationRecord
     user&.valid_password?(password) ? user : nil
   end
 
+  def self.authenticate_oauth(email, sub)
+    user = User.find_for_authentication(email: email)
+    user&[:sub] == sub ? user : nil
+  end
+
   has_many :keywords, inverse_of: :user, dependent: :destroy
 
   enum login_type: { email: 'email', google: 'google' }

@@ -13,6 +13,7 @@ module ExternalAuth
     def call
       @access_token ||= fetch_access_token
       return unless access_token
+
       google = URI("#{ACCESS_TOKEN_URL}#{access_token}")
       response = HTTParty.get(google)
       body = JSON.parse(response.body)
@@ -46,7 +47,7 @@ module ExternalAuth
       }
       response = HTTParty.post(uri, body: params)
       data = JSON.parse(response.body)
-      data['access_token'] if data['access_token']
+      data['access_token']
     end
   end
 end
