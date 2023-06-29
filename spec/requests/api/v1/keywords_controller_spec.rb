@@ -197,11 +197,11 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         expect(response).to have_http_status(:not_found)
       end
 
-      it 'returns the keyword.not_found error' do
+      it 'returns the api.errors.not_found error' do
         keyword = Fabricate(:keyword_parsed)
         get api_v1_keyword_path(keyword.id), headers: create_token_header
 
-        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('keyword.not_found'))
+        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.not_found'))
       end
     end
 
