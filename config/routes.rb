@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :private_items, only: :index
       resources :tokens, only: [:create]
       resources :registrations, only: [:create]
+      resources :google_users, only: [:create]
     end
   end
 
