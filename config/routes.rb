@@ -13,13 +13,10 @@ Rails.application.routes.draw do
         skip_controllers :authorizations, :applications, :authorized_applications, :token_info, :tokens, :confirmations
       end
       resources :keywords, only: [:index, :create, :show]
-      resources :private_items, only: :index
       resources :tokens, only: [:create]
       resources :registrations, only: [:create]
     end
   end
 
-  resources :public_items, only: :index
-  resources :private_items, only: :index
   resources :success_messages, only: :index
 end
