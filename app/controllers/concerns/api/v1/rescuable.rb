@@ -12,6 +12,27 @@ module Api
             status: :not_found
           )
         end
+
+        rescue_from ActionController::ParameterMissing do |exception|
+          render_errors(
+            details: [exception.param.to_s],
+            status: :bad_request
+          )
+        end
+
+        rescue_from ActiveRecord::RecordInvalid do |exception|
+          render_errors(
+            details: [exception.to_s],
+            status: :bad_request
+          )
+        end
+
+        rescue_from ActiveRecord::RecordNotSaved do |exception|
+          render_errors(
+            details: [exception.to_s],
+            status: :bad_request
+          )
+        end
       end
     end
   end
