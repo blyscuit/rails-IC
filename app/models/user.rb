@@ -17,14 +17,10 @@ class User < ApplicationRecord
     find_existing_user(auth) || create_new_user(auth)
   end
 
+  has_many :keywords, inverse_of: :user, dependent: :destroy
+
   private_class_method def self.find_existing_user(auth)
-    Rails.logger.debug auth.inspect
-    u = where(provider: auth.provider, uid: auth.uid, email: auth.info.email).first
-    Rails.logger.debug auth.provider
-    Rails.logger.debug auth.uid
-    Rails.logger.debug auth.info.email
-    Rails.logger.debug u.inspect
-    u
+    where(provider: auth.provider, uid: auth.uid, email: auth.info.email).first
   end
 
   private_class_method def self.create_new_user(auth)
@@ -40,6 +36,4 @@ class User < ApplicationRecord
     user.uid = auth.uid
     user.password = Devise.friendly_token
   end
-
-  has_many :keywords, inverse_of: :user, dependent: :destroy
 end
