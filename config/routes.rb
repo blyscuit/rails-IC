@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       devise_for :users, skip: [:registrations, :passwords], skip_helpers: true, controllers: {
-        confirmations: 'api/v1/confirmations'
+        confirmations: 'api/v1/confirmations',
+        omniauth_callbacks: 'api/v1/users/omniauth_callbacks'
       }
       use_doorkeeper do
         controllers tokens: 'tokens'
