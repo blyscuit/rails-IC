@@ -6,13 +6,20 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: %i[create]
 
       def create
-        data = ExternalAuth::FetchGoogleTokenService.new(create_params).call
+        auth = Doorkeeper::GrantsAssertion::Devise::OmniAuth.auth_hash(
+          provider: :google_oauth2,
+          assertion: create_params['code']
+        )
+        Rails.logger.debug 'auth...'
+        Rails.logger.debug auth
+        auth = ExternalAuth::FetchGoogleTokenService.new(create_params).call
         # return render_errors(
         #   details: I18n.t('authetication.generic_error'),
         #   status: :unprocessable_entity
         # ) unless data
+        Rails.logger.debug auth
 
-        user = User.new(email: data[:email], password: Devise.friendly_token, sub: data[:sub], login_type: :google)
+        user = User.new(email: auth[:email], password: Devise.friendly_token, sub: auth[:sub], login_type: :google)
         user.save!
 
         render success: true, status: :created

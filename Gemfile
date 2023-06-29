@@ -23,6 +23,9 @@ gem 'httparty' # A library to make http request easier
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
 gem 'doorkeeper' # OAuth 2 provider functionality to Ruby on Rails
+gem 'omniauth-google-oauth2' # OAuth 2 for Google
+gem 'doorkeeper-grants_assertion' # 3rd party assertion grant extension for Doorkeeper
+gem 'omniauth-rails_csrf_protection' # mitigation against OmniAuth Cross-Site Request Forgery
 
 # Translations
 # gem 'devise-i18n' # Translations for Devise
