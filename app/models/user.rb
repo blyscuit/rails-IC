@@ -5,7 +5,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :confirmable
+         :confirmable, :omniauthable, omniauth_providers: [:google_oauth2]
 
   # the authenticate method from devise documentation
   def self.authenticate(email, password)
@@ -13,12 +13,33 @@ class User < ApplicationRecord
     user&.valid_password?(password) ? user : nil
   end
 
-  def self.authenticate_oauth(email, sub)
-    user = User.find_for_authentication(email: email)
-    user&[:sub] == sub ? user : nil
+  def self.from_omniauth(auth)
+    find_existing_user(auth) || create_new_user(auth)
+  end
+
+  private_class_method def self.find_existing_user(auth)
+    Rails.logger.debug auth.inspect
+    u = where(provider: auth.provider, uid: auth.uid, email: auth.info.email).first
+    Rails.logger.debug auth.provider
+    Rails.logger.debug auth.uid
+    Rails.logger.debug auth.info.email
+    Rails.logger.debug u.inspect
+    u
+  end
+
+  private_class_method def self.create_new_user(auth)
+    Rails.logger.debug auth.inspect
+    create do |user|
+      user_attributes(user, auth)
+    end
+  end
+
+  private_class_method def self.user_attributes(user, auth)
+    user.email = auth.info.email
+    user.provider = auth.provider
+    user.uid = auth.uid
+    user.password = Devise.friendly_token
   end
 
   has_many :keywords, inverse_of: :user, dependent: :destroy
-
-  enum login_type: { email: 'email', google: 'google' }
 end
