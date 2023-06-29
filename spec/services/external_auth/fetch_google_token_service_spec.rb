@@ -17,7 +17,7 @@ RSpec.describe ExternalAuth::FetchGoogleTokenService, type: :service do
       end
     end
 
-    context 'when Google failed auth code response ' do
+    context 'when Google failed auth code response' do
       it 'raises error' do
         ACCESS_CODE = 'access_code'
         stub_request(:post, %r{googleapis.com/oauth2/v3}).to_return(status: 422)
@@ -27,7 +27,7 @@ RSpec.describe ExternalAuth::FetchGoogleTokenService, type: :service do
       end
     end
 
-    context 'when Google failed access token response ' do
+    context 'when Google failed access token response' do
       it 'raises error' do
         ACCESS_CODE = 'access_code'
         ACCESS_TOKEN = 'access_token'
