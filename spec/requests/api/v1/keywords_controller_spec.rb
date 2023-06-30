@@ -30,6 +30,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
         it 'returns metadata with page = 1, per_page = 2 and total_items = 3' do
           user = Fabricate(:user)
           Fabricate.times(3, :keyword, user: user)
+
           get api_v1_keywords_path, params: { page: 1, per_page: 2 }, headers: create_token_header(user)
           response_body = JSON.parse(response.body, symbolize_names: true)
 
@@ -57,6 +58,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
         it 'returns metadata with page = 1, per_page = 2 and total_items = 0' do
           Fabricate(:keyword)
+
           get api_v1_keywords_path, params: { page: 1, per_page: 2 }, headers: create_token_header
           response_body = JSON.parse(response.body, symbolize_names: true)
 
@@ -65,7 +67,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
     end
 
-    context 'given a non-logged in user' do
+    context 'given no token headers' do
       it 'returns an unauthorized error' do
         get api_v1_keywords_path
 
@@ -100,6 +102,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       context 'when Google search is successfully fetched' do
         it 'saves keyword "Apple" with top ads count as 3' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
+
           params = { 'file' => fixture_file_upload('csv/valid.csv') }
           perform_enqueued_jobs do
             post api_v1_keywords_path, params: params, headers: create_token_header
@@ -112,6 +115,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       context 'when Google search returns too many attemps status 422' do
         it 'does not saves information for "Apple"' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
+
           params = { 'file' => fixture_file_upload('csv/valid.csv') }
           perform_enqueued_jobs do
             post api_v1_keywords_path, params: params, headers: create_token_header
@@ -167,6 +171,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       it 'returns success status' do
         keyword = Fabricate(:keyword_parsed)
         user = keyword.user
+
         get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
 
         expect(response).to have_http_status(:success)
@@ -175,6 +180,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       it 'returns same ads_page_count as the keyword' do
         keyword = Fabricate(:keyword_parsed)
         user = keyword.user
+
         get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
 
         expect(JSON.parse(response.body)['data']['attributes']['ads_page_count']).to eq(keyword.reload.ads_page_count)
@@ -183,6 +189,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       it 'returns json with source as an included relationship' do
         keyword = Fabricate(:keyword_parsed)
         user = keyword.user
+
         get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
 
         expect(JSON.parse(response.body)['included'].find { |included| included['type'] == 'source' }['attributes']['name']).to eq(keyword.reload.source.name)
@@ -192,6 +199,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
     context 'when keyword does not belonged to the user' do
       it 'returns not found status' do
         keyword = Fabricate(:keyword_parsed)
+
         get api_v1_keyword_path(keyword.id), headers: create_token_header
 
         expect(response).to have_http_status(:not_found)
@@ -199,6 +207,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
       it 'returns the api.errors.not_found error' do
         keyword = Fabricate(:keyword_parsed)
+
         get api_v1_keyword_path(keyword.id), headers: create_token_header
 
         expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.not_found'))
@@ -213,7 +222,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       end
     end
 
-    context 'given a non-logged in user' do
+    context 'given no token headers' do
       it 'returns an unauthorized error' do
         get api_v1_keyword_path(0)
 

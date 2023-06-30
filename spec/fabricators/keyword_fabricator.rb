@@ -15,5 +15,6 @@ Fabricator(:keyword_parsed, from: :keyword) do
   result_urls(rand: 9) { FFaker::Internet.http_url }
   total_link_count { FFaker.rand 9 }
   html { FFaker::HTMLIpsum.body }
+
   source { Fabricate(:source) }
 end
