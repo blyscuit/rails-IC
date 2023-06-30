@@ -28,10 +28,24 @@ module Api
 
         private
 
-        def render_success
-          # TODO: Render Doorkeeper Token
+        def client_application
+          state = JSON.parse(request.env['action_dispatch.request.parameters']['state'])
+          app_client_id = state['client_id']
 
-          render json: { success: true }
+          Doorkeeper::Application.find_by(uid: app_client_id)
+        end
+
+        def render_success
+          user = @user
+          access_token = Doorkeeper::AccessToken.create(
+            resource_owner_id: user.id, 
+            application_id: client_application.id, 
+            use_refresh_token: true, 
+            expires_in: Doorkeeper.configuration.access_token_expires_in.to_i, 
+            scopes: ''
+          )
+          
+          render json: Doorkeeper::OAuth::TokenResponse.new(access_token).body
         end
       end
     end
