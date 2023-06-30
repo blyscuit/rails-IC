@@ -10,16 +10,6 @@ module Api
 
       before_action :doorkeeper_authorize!
 
-      def raw_resources(klass, policy_scope_klass = nil)
-        resolve_policy_scope(klass, policy_scope_klass)
-      end
-
-      def resolve_policy_scope(scope, policy_scope_klass)
-        return policy_scope(scope) unless policy_scope_klass
-
-        policy_scope_klass.new(current_user, scope).resolve
-      end
-
       private
 
       def current_user
@@ -43,6 +33,16 @@ module Api
           page: params[:page],
           items: params[:per_page]
         }
+      end
+
+      def authorized_resources(klass, policy_scope_klass = nil)
+        resolve_policy_scope(klass, policy_scope_klass)
+      end
+
+      def resolve_policy_scope(scope, policy_scope_klass)
+        return policy_scope(scope) unless policy_scope_klass
+
+        policy_scope_klass.new(current_user, scope).resolve
       end
     end
   end
