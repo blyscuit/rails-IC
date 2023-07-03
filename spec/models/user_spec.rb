@@ -3,9 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user) { Fabricate(:user) }
+  describe '.from_omniauth' do
+    context 'given an existing user is found' do
+      it 'returns the existing user' do
+        auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
+        user = Fabricate(:user,
+                         provider: auth['provider'],
+                         uid: auth['uid'],
+                         email: auth['info']['email'])
 
-  it 'has email' do
-    expect(user.email).not_to be_nil
+        expect(described_class.from_omniauth(auth)).to eq(user)
+      end
+    end
+
+    context 'given a new user' do
+      it 'creates a new user with the provided attributes' do
+        auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
+
+        user = described_class.from_omniauth(auth)
+
+        expect(user.provider).to eq(auth['provider'])
+        expect(user.uid).to eq(auth['uid'])
+        expect(user.email).to eq(auth['info']['email'])
+      end
+    end
   end
 end
