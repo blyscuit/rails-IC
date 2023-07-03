@@ -11,7 +11,7 @@ module Api
       end
 
       def create
-        if csv_form.save(params[:file], source_name(params))
+        if csv_form.save(params[:file], source_param)
           render json: create_success_response
         else
           render_errors(
@@ -45,7 +45,7 @@ module Api
         }
       end
 
-      def source_name(params)
+      def source_param
         params[:source]
       end
     end
