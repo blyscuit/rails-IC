@@ -10,7 +10,7 @@ RSpec.describe SearchKeywordJob, type: :job do
       context 'given a valid request' do
         it 'saves 3 as ads_top_count' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -19,7 +19,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'saves 4 as ads_page_count' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -28,7 +28,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'saves 6 ads_top_urls' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -37,7 +37,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'saves 10 as result_count' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -46,7 +46,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'saves 10 result_urls' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -55,17 +55,17 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'saves 14 as total_link_count' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
           expect(keyword.reload.total_link_count).to eq(14)
         end
 
-        it 'saves returned html as html' do
+        it 'saves html response as html' do
           html = file_fixture('html/valid_google.html').read
           stub_request(:get, %r{google.com/search}).to_return(body: html)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -74,7 +74,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'saves keyword status as parsed' do
           stub_request(:get, %r{google.com/search}).to_return(body: file_fixture('html/valid_google.html').read)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -83,35 +83,23 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       context 'given a 422 too many requests error' do
-        # rubocop:disable RSpec/ExampleLength
         it 'does not set any result' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
           keyword.reload
 
-          expect(
-            [
-              keyword.ads_top_urls,
-              keyword.result_urls,
-              keyword.html
-            ]
-          ).to all(be_nil)
-          expect(
-            [
-              keyword.ads_top_count,
-              keyword.ads_page_count,
-              keyword.result_count,
-              keyword.total_link_count
-            ]
-          ).to all(eq(0))
+          keyword_urls = [keyword.ads_top_urls, keyword.result_urls, keyword.html]
+          expect(keyword_urls).to all(be_nil)
+
+          keyword_result_counts = [keyword.ads_top_count, keyword.ads_page_count, keyword.result_count, keyword.total_link_count]
+          expect(keyword_result_counts).to all(eq(0))
         end
-        # rubocop:enable RSpec/ExampleLength
 
         it 'saves keyword status as failed' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
@@ -120,16 +108,16 @@ RSpec.describe SearchKeywordJob, type: :job do
 
         it 'does not set the html attribute' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
 
-          expect(keyword.reload.reload.html).not_to be_present
+          expect(keyword.reload.html).not_to be_present
         end
 
         it 'performs a job with the right keyword' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
-          keyword = Fabricate(:keyword)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
           keyword_id = keyword.id
 
           allow(described_class).to receive(:perform_now)
@@ -197,7 +185,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           expect(keyword.reload.total_link_count).to eq(11)
         end
 
-        it 'saves returned html as html' do
+        it 'saves html response as html' do
           html = file_fixture('html/valid_bing.html').read
           stub_request(:get, %r{bing.com/search}).to_return(body: html)
           keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Bing'))
@@ -218,7 +206,6 @@ RSpec.describe SearchKeywordJob, type: :job do
       end
 
       context 'given a 422 too many requests error' do
-        # rubocop:disable RSpec/ExampleLength
         it 'does not set any result' do
           stub_request(:get, %r{bing.com/search}).to_return(status: 422)
           keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Bing'))
@@ -226,23 +213,12 @@ RSpec.describe SearchKeywordJob, type: :job do
           described_class.perform_now keyword.id
           keyword.reload
 
-          expect(
-            [
-              keyword.ads_top_urls,
-              keyword.result_urls,
-              keyword.html
-            ]
-          ).to all(be_nil)
-          expect(
-            [
-              keyword.ads_top_count,
-              keyword.ads_page_count,
-              keyword.result_count,
-              keyword.total_link_count
-            ]
-          ).to all(eq(0))
+          keyword_urls = [keyword.ads_top_urls, keyword.result_urls, keyword.html]
+          expect(keyword_urls).to all(be_nil)
+
+          keyword_result_counts = [keyword.ads_top_count, keyword.ads_page_count, keyword.result_count, keyword.total_link_count]
+          expect(keyword_result_counts).to all(eq(0))
         end
-        # rubocop:enable RSpec/ExampleLength
 
         it 'saves keyword status as failed' do
           stub_request(:get, %r{bing.com/search}).to_return(status: 422)
@@ -259,7 +235,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
           described_class.perform_now keyword.id
 
-          expect(keyword.reload.reload.html).not_to be_present
+          expect(keyword.reload.html).not_to be_present
         end
 
         it 'performs a job with the right keyword' do
