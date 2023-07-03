@@ -152,9 +152,6 @@ GEM
     docile (1.4.0)
     doorkeeper (5.6.6)
       railties (>= 5)
-    doorkeeper-grants_assertion (0.3.1)
-      doorkeeper (>= 4.0)
-      railties (>= 5.0)
     erubi (1.12.0)
     fabrication (2.30.0)
     faker (3.2.0)
@@ -472,7 +469,6 @@ DEPENDENCIES
   devise
   discard
   doorkeeper
-  doorkeeper-grants_assertion
   fabrication
   faker
   ffaker

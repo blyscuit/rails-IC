@@ -17,7 +17,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
           }
         )
 
-        post "/api/v1/users/auth/google_oauth2/callback"
+        post '/api/v1/users/auth/google_oauth2/callback'
 
         expect(response).to have_http_status(:success)
       end
@@ -25,16 +25,16 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
 
     context 'given the email is not available' do
       it 'returns an unprocessable entity response with errors' do
-        EXISTING_EMAIL = 'email@email.com'
+        existing_email = 'email@email.com'
         OmniAuth.config.test_mode = true
         OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
           {
             provider: 'google',
             uid: '123545',
-            info: { email: EXISTING_EMAIL }
+            info: { email: existing_email }
           }
         )
-        user = Fabricate(:user, email: EXISTING_EMAIL)
+        Fabricate(:user, email: existing_email)
 
         post api_v1_user_google_oauth2_omniauth_callback_path
 
@@ -63,7 +63,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
         post api_v1_user_google_oauth2_omniauth_callback_path
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)['errors']['details']).to include("Invalid credentials")
+        expect(JSON.parse(response.body)['errors']['details']).to include('Invalid credentials')
       end
     end
   end
