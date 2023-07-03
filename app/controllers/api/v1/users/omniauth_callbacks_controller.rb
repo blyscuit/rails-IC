@@ -7,6 +7,8 @@ module Api
         include ErrorRenderable
 
         rescue_from ArgumentError, with: :render_bad_request
+        rescue_from TypeError, with: :render_bad_request
+        rescue_from NoMethodError, with: :render_bad_request
 
         def google_oauth2
           @user = User.from_omniauth(request.env['omniauth.auth'])
@@ -38,13 +40,13 @@ module Api
         def render_success
           user = @user
           access_token = Doorkeeper::AccessToken.create(
-            resource_owner_id: user.id, 
-            application_id: client_application.id, 
-            use_refresh_token: true, 
-            expires_in: Doorkeeper.configuration.access_token_expires_in.to_i, 
+            resource_owner_id: user.id,
+            application_id: client_application.id,
+            use_refresh_token: true,
+            expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
             scopes: ''
           )
-          
+
           render json: Doorkeeper::OAuth::TokenResponse.new(access_token).body
         end
       end
