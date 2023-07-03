@@ -5,4 +5,6 @@ Fabricator(:user) do
   password { 'password123' }
   password_confirmation { 'password123' }
   confirmed_at { 1.month.ago }
+  provider { 'email' }
+  uid { FFaker::Identification.ssn }
 end
