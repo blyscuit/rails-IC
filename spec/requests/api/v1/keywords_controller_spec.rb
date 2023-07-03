@@ -115,11 +115,11 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
       context 'when Google search returns too many attemps status 422' do
         it 'does not saves information for "Apple"' do
           stub_request(:get, %r{google.com/search}).to_return(status: 422)
-          params = { 'file' => fixture_file_upload('csv/valid.csv') }
         rescue Google::Errors::SearchKeywordError
           perform_enqueued_jobs do
             post api_v1_keywords_path, params: params, headers: create_token_header
           end
+            params = { 'file' => fixture_file_upload('csv/valid.csv'), 'source' => 'google' }
 
             expect(Keyword.where(name: 'Apple').first[:ads_top_count]).to eq(0)
           end
@@ -133,7 +133,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
-        it 'returns a invalid_file error' do
+        it 'returns an invalid_file error' do
           post api_v1_keywords_path, headers: create_token_header
 
           expect(JSON.parse(response.body)['errors']['code']).to eq('invalid_file')
@@ -249,72 +249,73 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           params = { 'file' => fixture_file_upload('csv/valid.csv'), 'source' => 'bing' }
           post api_v1_keywords_path, params: params
 
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-  end
-
-  describe 'GET#show' do
-    context 'when CSV file is valid' do
-      it 'returns success status' do
-        keyword = Fabricate(:keyword_parsed)
-        user = keyword.user
-
-        get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
-
-        expect(response).to have_http_status(:success)
-      end
-
-      it 'returns same ads_page_count as the keyword' do
-        keyword = Fabricate(:keyword_parsed)
-        user = keyword.user
-
-        get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
-
-        expect(JSON.parse(response.body)['data']['attributes']['ads_page_count']).to eq(keyword.reload.ads_page_count)
-      end
-
-      it 'returns json with source as an included relationship' do
-        keyword = Fabricate(:keyword_parsed)
-        user = keyword.user
-
-        get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
-
-        expect(JSON.parse(response.body)['included'].find { |included| included['type'] == 'source' }['attributes']['name']).to eq(keyword.reload.source.name)
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
-    context 'when keyword does not belonged to the user' do
-      it 'returns not found status' do
-        keyword = Fabricate(:keyword_parsed)
+    describe 'GET#show' do
+      context 'when CSV file is valid' do
+        it 'returns success status' do
+          keyword = Fabricate(:keyword_parsed)
+          user = keyword.user
 
-        get api_v1_keyword_path(keyword.id), headers: create_token_header
+          get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
 
-        expect(response).to have_http_status(:not_found)
+          expect(response).to have_http_status(:success)
+        end
+
+        it 'returns same ads_page_count as the keyword' do
+          keyword = Fabricate(:keyword_parsed)
+          user = keyword.user
+
+          get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
+
+          expect(JSON.parse(response.body)['data']['attributes']['ads_page_count']).to eq(keyword.reload.ads_page_count)
+        end
+
+        it 'returns json with source as an included relationship' do
+          keyword = Fabricate(:keyword_parsed)
+          user = keyword.user
+
+          get api_v1_keyword_path(keyword.id), headers: create_token_header(user)
+
+          expect(JSON.parse(response.body)['included'].find { |included| included['type'] == 'source' }['attributes']['name']).to eq(keyword.reload.source.name)
+        end
       end
 
-      it 'returns the api.errors.not_found error' do
-        keyword = Fabricate(:keyword_parsed)
+      context 'when keyword does not belonged to the user' do
+        it 'returns not found status' do
+          keyword = Fabricate(:keyword_parsed)
 
-        get api_v1_keyword_path(keyword.id), headers: create_token_header
+          get api_v1_keyword_path(keyword.id), headers: create_token_header
 
-        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.not_found'))
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it 'returns the api.errors.not_found error' do
+          keyword = Fabricate(:keyword_parsed)
+
+          get api_v1_keyword_path(keyword.id), headers: create_token_header
+
+          expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.not_found'))
+        end
       end
-    end
 
-    context 'when there is no keyword' do
-      it 'returns not found status' do
-        get api_v1_keyword_path(0), headers: create_token_header
+      context 'when there is no keyword' do
+        it 'returns not found status' do
+          get api_v1_keyword_path(0), headers: create_token_header
 
-        expect(response).to have_http_status(:not_found)
+          expect(response).to have_http_status(:not_found)
+        end
       end
-    end
 
-    context 'given no token headers' do
-      it 'returns an unauthorized error' do
-        get api_v1_keyword_path(0)
+      context 'given no token headers' do
+        it 'returns an unauthorized error' do
+          get api_v1_keyword_path(0)
 
-        expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
   end
