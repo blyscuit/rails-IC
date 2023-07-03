@@ -2,25 +2,23 @@
 
 class SearchKeywordJob < ApplicationJob
   def perform(keyword_id)
-    keyword = Keyword.includes(:source).where(keywords: { id: keyword_id }).first
+    keyword = Keyword.includes(:source).find(keyword_id)
     keyword_name = keyword.name
-    source_name = keyword.source.name.downcase
-    case source_name
-    when 'google'
-      search_result = Google::SearchService.new(keyword_name).call
-    when 'bing'
-      search_result = Bing::SearchService.new(keyword_name).call
-    end
+    search_result = search_service(keyword).new(keyword_name).call
     update_keyword(keyword, search_result)
   end
 
   private
 
+  def search_service(keyword)
+    source_name = keyword.source.name.downcase
+    return Bing::SearchService if source_name == 'bing'
+
+    Google::SearchService
+  end
+
   def update_keyword(keyword, search_result)
-    if search_result
-      keyword.update search_result.merge(status: :parsed)
-    else
-      keyword.update({ status: :failed })
-    end
+    keyword_data = search_result ? search_result.merge(status: :parsed) : { status: :failed }
+    keyword.update(keyword_data)
   end
 end

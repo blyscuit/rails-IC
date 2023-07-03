@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 Fabricator(:source) do
-  name { FFaker::Company.unique.name }
+  name { %w[Google Bing].sample }
 end
