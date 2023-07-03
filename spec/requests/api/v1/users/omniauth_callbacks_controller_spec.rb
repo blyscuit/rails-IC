@@ -17,9 +17,45 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
           }
         )
 
-        post '/api/v1/users/auth/google_oauth2/callback'
+        post "#{api_v1_user_google_oauth2_omniauth_callback_path}?state=%7B%22client_id%22%3A%22#{application.uid}k%22%7D"
 
         expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when request is missing the client id' do
+      it 'returns bad_request error' do
+        OmniAuth.config.test_mode = true
+        OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+          {
+            provider: :google_oauth2,
+            uid: '123545',
+            info: { email: 'email@email.com' }
+          }
+        )
+
+        post api_v1_user_google_oauth2_omniauth_callback_path
+
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.bad_request'))
+      end
+    end
+
+    context 'when Doorkeeper:Application is missing' do
+      it 'returns bad_request error' do
+        OmniAuth.config.test_mode = true
+        OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+          {
+            provider: :google_oauth2,
+            uid: '123545',
+            info: { email: 'email@email.com' }
+          }
+        )
+
+        post "#{api_v1_user_google_oauth2_omniauth_callback_path}?state=%7B%22client_id%22%3A%22missingk%22%7D"
+
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.bad_request'))
       end
     end
 
