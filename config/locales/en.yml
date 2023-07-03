@@ -41,3 +41,4 @@ en:
   api:
     errors:
       not_found: "Item not found"
+      bad_request: "Bad request"
