@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Source, type: :model do
-  context 'when saving two Sources with different cases' do
-    it 'saves only one Source' do
+  context 'when creating two Sources with different cases' do
+    it 'does NOT create a second source' do
       described_class.find_or_create_by({ name: 'nimble' })
 
       expect do
@@ -13,8 +13,8 @@ RSpec.describe Source, type: :model do
     end
   end
 
-  context 'when saving two Sources with different names' do
-    it 'saves two Sources' do
+  context 'when creating two Sources with different names' do
+    it 'saves 2 sources' do
       described_class.find_or_create_by({ name: 'nimble1' })
 
       expect do
