@@ -1,24 +1,31 @@
 # frozen_string_literal: true
 
 class SearchKeywordJob < ApplicationJob
+  attr_reader :keyword
+
   def perform(keyword_id)
-    keyword = Keyword.includes(:source).find(keyword_id)
-    keyword_name = keyword.name
-    search_result = search_service(keyword).new(keyword_name).call
-    update_keyword(keyword, search_result)
+    @keyword = Keyword.includes(:source).find(keyword_id)
+    search_result = search_service
+    update_keyword(search_result)
   end
 
   private
 
-  def search_service(keyword)
+  def search_service
     source_name = keyword.source.name.downcase
-    return Bing::SearchService if source_name == 'bing'
+    keyword_name = keyword.name
 
-    Google::SearchService
+    return Bing::SearchService.new(keyword_name).call if source_name == 'bing'
+
+    Google::SearchService.new(keyword_name).call
   end
 
-  def update_keyword(keyword, search_result)
-    keyword_data = search_result ? search_result.merge(status: :parsed) : { status: :failed }
-    keyword.update(keyword_data)
+  def update_keyword(search_result)
+    if search_result
+      keyword.update search_result.merge(status: :parsed)
+    else
+      keyword.update({ status: :failed })
+      raise Errors::SearchKeywordError
+    end
   end
 end

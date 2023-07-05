@@ -89,6 +89,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
           described_class.perform_now keyword.id
           keyword.reload
+        rescue Errors::SearchKeywordError
 
           keyword_urls = [keyword.ads_top_urls, keyword.result_urls, keyword.html]
           expect(keyword_urls).to all(be_nil)
@@ -102,6 +103,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
+        rescue Errors::SearchKeywordError
 
           expect(keyword.reload.status).to eq('failed')
         end
@@ -111,6 +113,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
 
           described_class.perform_now keyword.id
+        rescue Errors::SearchKeywordError
 
           expect(keyword.reload.html).not_to be_present
         end
@@ -123,8 +126,18 @@ RSpec.describe SearchKeywordJob, type: :job do
           allow(described_class).to receive(:perform_now)
 
           described_class.perform_now keyword_id
+        rescue Errors::SearchKeywordError
 
           expect(described_class).to have_received(:perform_now).with(keyword_id).exactly(:once)
+        end
+
+        it 'raises SearchKeywordError to trigger Sidekiq retry' do
+          stub_request(:get, %r{google.com/search}).to_return(status: 422)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Google'))
+
+          expect do
+            described_class.perform_now keyword.id
+          end.to raise_error(Errors::SearchKeywordError)
         end
       end
     end
@@ -212,6 +225,7 @@ RSpec.describe SearchKeywordJob, type: :job do
 
           described_class.perform_now keyword.id
           keyword.reload
+        rescue Errors::SearchKeywordError
 
           keyword_urls = [keyword.ads_top_urls, keyword.result_urls, keyword.html]
           expect(keyword_urls).to all(be_nil)
@@ -225,6 +239,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Bing'))
 
           described_class.perform_now keyword.id
+        rescue Errors::SearchKeywordError
 
           expect(keyword.reload.status).to eq('failed')
         end
@@ -234,6 +249,7 @@ RSpec.describe SearchKeywordJob, type: :job do
           keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Bing'))
 
           described_class.perform_now keyword.id
+        rescue Errors::SearchKeywordError
 
           expect(keyword.reload.html).not_to be_present
         end
@@ -246,18 +262,19 @@ RSpec.describe SearchKeywordJob, type: :job do
           allow(described_class).to receive(:perform_now)
 
           described_class.perform_now keyword_id
+        rescue Errors::SearchKeywordError
 
           expect(described_class).to have_received(:perform_now).with(keyword_id).exactly(:once)
         end
-      end
 
-      it 'raises SearchKeywordError to trigger Sidekiq retry' do
-        stub_request(:get, %r{google.com/search}).to_return(status: 422)
-        keyword = Fabricate(:keyword)
+        it 'raises SearchKeywordError to trigger Sidekiq retry' do
+          stub_request(:get, %r{bing.com/search}).to_return(status: 422)
+          keyword = Fabricate(:keyword, source: Fabricate(:source, name: 'Bing'))
 
-        expect do
-          described_class.perform_now keyword.id
-        end.to raise_error(Google::Errors::SearchKeywordError)
+          expect do
+            described_class.perform_now keyword.id
+          end.to raise_error(Errors::SearchKeywordError)
+        end
       end
     end
   end

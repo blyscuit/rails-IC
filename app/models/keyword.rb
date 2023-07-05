@@ -11,5 +11,6 @@ class Keyword < ApplicationRecord
   private
 
   def perform_search
-      SearchKeywordJob.perform_later id
+    SearchKeywordJob.perform_later id
+  end
 end
