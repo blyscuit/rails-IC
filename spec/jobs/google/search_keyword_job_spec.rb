@@ -141,7 +141,7 @@ RSpec.describe Google::SearchKeywordJob, type: :job do
         expect(described_class).to have_received(:perform_now).with(keyword_id).exactly(:once)
       end
 
-      it 'raises SearchKeywordError' do
+      it 'raises SearchKeywordError to trigger Sidekiq retry' do
         stub_request(:get, %r{google.com/search}).to_return(status: 422)
         keyword = Fabricate(:keyword)
 
