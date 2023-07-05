@@ -16,7 +16,7 @@ module Google
       else
         keyword.update({ status: :failed })
 
-        raise Google::Errors::SearchKeywordError unless search_result
+        raise Google::Errors::SearchKeywordError
       end
     end
   end
