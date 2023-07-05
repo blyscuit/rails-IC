@@ -22,6 +22,7 @@ class User < ApplicationRecord
   end
 
   has_many :keywords, inverse_of: :user, dependent: :destroy
+  enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
 
   private_class_method def self.find_existing_user(auth)
     where(provider: auth.provider, uid: auth.uid, email: auth.info.email).first
@@ -39,6 +40,4 @@ class User < ApplicationRecord
     user.uid = auth.uid
     user.password = Devise.friendly_token
   end
-
-  enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
 end
