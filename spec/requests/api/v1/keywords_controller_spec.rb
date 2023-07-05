@@ -112,15 +112,14 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           end
         end
 
-      context 'when Google search returns too many attemps status 422' do
-        it 'does not saves information for "Apple"' do
-          stub_request(:get, %r{google.com/search}).to_return(status: 422)
-        rescue Google::Errors::SearchKeywordError
-          perform_enqueued_jobs do
-            post api_v1_keywords_path, params: params, headers: create_token_header
-          end
+        context 'when Google search returns too many attemps status 422' do
+          it 'does not saves information for "Apple"' do
+            stub_request(:get, %r{google.com/search}).to_return(status: 422)
             params = { 'file' => fixture_file_upload('csv/valid.csv'), 'source' => 'google' }
-
+          rescue Errors::SearchKeywordError
+            perform_enqueued_jobs do
+              post api_v1_keywords_path, params: params, headers: create_token_header
+            end
             expect(Keyword.where(name: 'Apple').first[:ads_top_count]).to eq(0)
           end
         end
@@ -205,6 +204,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           it 'does not saves information for "VPN"' do
             stub_request(:get, %r{bing.com/search}).to_return(status: 422)
             params = { 'file' => fixture_file_upload('csv/valid.csv'), 'source' => 'bing' }
+          rescue Errors::SearchKeywordError
             perform_enqueued_jobs do
               post api_v1_keywords_path, params: params, headers: create_token_header
             end
