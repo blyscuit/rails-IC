@@ -14,6 +14,10 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
+    case auth.provider
+    when :email
+      return
+    end
     find_existing_user(auth) || create_new_user(auth)
   end
 
@@ -24,7 +28,6 @@ class User < ApplicationRecord
   end
 
   private_class_method def self.create_new_user(auth)
-    Rails.logger.debug auth.inspect
     create do |user|
       user_attributes(user, auth)
     end
@@ -36,4 +39,6 @@ class User < ApplicationRecord
     user.uid = auth.uid
     user.password = Devise.friendly_token
   end
+
+  enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
 end

@@ -27,5 +27,19 @@ RSpec.describe User, type: :model do
         expect(user.email).to eq(auth['info']['email'])
       end
     end
+
+    context 'given an existing user with email provider' do
+      it 'does NOT create a new user' do
+        auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
+        Fabricate(:user,
+                  provider: :email,
+                  uid: auth['uid'],
+                  email: auth['info']['email'])
+
+        expect do
+          described_class.from_omniauth(auth)
+        end.not_to change(described_class, :count)
+      end
+    end
   end
 end
