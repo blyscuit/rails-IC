@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
   describe 'POST #google_oauth2' do
     context 'given the email is available' do
-      it 'returns a successful response' do
+      it 'returns a successful response with access_token' do
         application = Fabricate(:application)
         allow(Doorkeeper::Application).to receive(:find_by).and_return(application)
         OmniAuth.config.test_mode = true
@@ -20,6 +20,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
         post "#{api_v1_user_google_oauth2_omniauth_callback_path}?state=%7B%22client_id%22%3A%22#{application.uid}k%22%7D"
 
         expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body)['access_token']).not_to be_nil
       end
     end
 
