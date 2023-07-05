@@ -42,6 +42,25 @@ RSpec.describe RegistrationForm do
       end
     end
 
+    context 'given user has entered a duplicated email with an anccount with google provider' do
+      it 'returns false' do
+        user = Fabricate(:user, provider: Faker::Omniauth.google[:provider])
+        params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
+        form = described_class.new
+
+        expect(form.save(params)).to be false
+      end
+
+      it 'has "already taken" error messages' do
+        user = Fabricate(:user, provider: Faker::Omniauth.google[:provider])
+        params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
+        form = described_class.new
+        form.save(params)
+
+        expect(form.errors[:email]).to include('has already been taken')
+      end
+    end
+
     context 'given user has entered a different confirm password' do
       it 'returns false' do
         application = Fabricate(:application)

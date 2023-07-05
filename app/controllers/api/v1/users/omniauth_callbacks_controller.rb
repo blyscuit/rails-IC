@@ -6,6 +6,8 @@ module Api
       class OmniauthCallbacksController < Devise::OmniauthCallbacksController
         include ErrorRenderable
 
+        rescue_from ArgumentError, with: :render_bad_request
+
         def google_oauth2
           @user = User.from_omniauth(auth)
 
