@@ -11,7 +11,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
         OmniAuth.config.test_mode = true
         OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
           {
-            provider: 'google',
+            provider: :google_oauth2,
             uid: '123545',
             info: { email: 'email@email.com' }
           }
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
         OmniAuth.config.test_mode = true
         OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
           {
-            provider: 'google',
+            provider: :google_oauth2,
             uid: '123545',
             info: { email: existing_email }
           }
@@ -48,6 +48,23 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
         OmniAuth.config.test_mode = true
         OmniAuth.config.mock_auth[:google_oauth2] = nil
 
+        post api_v1_user_google_oauth2_omniauth_callback_path
+
+        expect(response).to have_http_status(:bad_request)
+        expect(JSON.parse(response.body)['errors']['details']).to include(I18n.t('api.errors.bad_request'))
+      end
+    end
+
+    context 'when OmniAuth returns nil email' do
+      it 'returns unprocessable_entity error' do
+        OmniAuth.config.test_mode = true
+        OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+          {
+            provider: :google_oauth2,
+            uid: '123545',
+            info: { email: nil }
+          }
+        )
         post api_v1_user_google_oauth2_omniauth_callback_path
 
         expect(response).to have_http_status(:unprocessable_entity)
