@@ -42,7 +42,7 @@ RSpec.describe RegistrationForm do
       end
     end
 
-    context 'given user has entered a duplicated email with an anccount with google provider' do
+    context 'given user has entered a duplicated email with an account with google provider' do
       it 'returns false' do
         user = Fabricate(:user, provider: Faker::Omniauth.google[:provider])
         params = Fabricate.attributes_for(:user, email: user.email).merge!(client_id: Fabricate(:application).uid)
