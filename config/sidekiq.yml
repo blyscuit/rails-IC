@@ -7,3 +7,7 @@
 development:
   :queues:
     - [development_default, 1]
+
+production:
+  :queues:
+    - [production_default, 1]
