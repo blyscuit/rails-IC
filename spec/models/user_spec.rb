@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   describe '.from_omniauth' do
     context 'given an existing user is found' do
       it 'returns the existing user' do
-        auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
+        auth = OmniAuth::AuthHash.new(OAuthFake.google)
         user = Fabricate(:user,
                          provider: auth['provider'],
                          uid: auth['uid'],
@@ -18,7 +18,7 @@ RSpec.describe User, type: :model do
 
     context 'given a new user' do
       it 'creates a new user with the provided attributes' do
-        auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
+        auth = OmniAuth::AuthHash.new(OAuthFake.google)
 
         user = described_class.from_omniauth(auth)
 
@@ -26,11 +26,19 @@ RSpec.describe User, type: :model do
         expect(user.uid).to eq(auth['uid'])
         expect(user.email).to eq(auth['info']['email'])
       end
+
+      it 'creates a new user' do
+        auth = OmniAuth::AuthHash.new(OAuthFake.google)
+
+        expect do
+          described_class.from_omniauth(auth)
+        end.to change(described_class, :count).by(1)
+      end
     end
 
     context 'given an existing user with email provider' do
       it 'does NOT create a new user' do
-        auth = OmniAuth::AuthHash.new(Faker::Omniauth.google)
+        auth = OmniAuth::AuthHash.new(OAuthFake.google)
         Fabricate(:user,
                   provider: :email,
                   uid: auth['uid'],

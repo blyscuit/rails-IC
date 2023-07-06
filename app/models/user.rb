@@ -18,17 +18,17 @@ class User < ApplicationRecord
     when :email
       return
     end
-    find_existing_user(auth) || create_new_user(auth)
+    find_with_auth(auth) || create_from_auth(auth)
   end
 
   has_many :keywords, inverse_of: :user, dependent: :destroy
   enum provider: { email: 'email', google_oauth2: 'google_oauth2' }
 
-  private_class_method def self.find_existing_user(auth)
+  private_class_method def self.find_with_auth(auth)
     where(provider: auth.provider, uid: auth.uid, email: auth.info.email).first
   end
 
-  private_class_method def self.create_new_user(auth)
+  private_class_method def self.create_from_auth(auth)
     create do |user|
       user_attributes(user, auth)
     end

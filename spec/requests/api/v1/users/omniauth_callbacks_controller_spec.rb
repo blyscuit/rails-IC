@@ -24,7 +24,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
     end
 
     context 'given the email is not available' do
-      it 'returns an unprocessable entity response with errors' do
+      it 'returns unprocessable_entity error' do
         existing_email = 'email@email.com'
         OmniAuth.config.test_mode = true
         OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
