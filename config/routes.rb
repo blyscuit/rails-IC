@@ -13,10 +13,10 @@ Rails.application.routes.draw do
         controllers tokens: 'tokens'
         skip_controllers :authorizations, :applications, :authorized_applications, :token_info, :tokens, :confirmations
       end
-      resources :keywords, only: [:index, :create, :show]
-      resources :tokens, only: [:create]
-      resources :registrations, only: [:create]
       resources :google_users, only: [:create]
+      resources :keywords, only: [:index, :create, :show]
+      resources :registrations, only: [:create]
+      resources :tokens, only: [:create]
     end
   end
 

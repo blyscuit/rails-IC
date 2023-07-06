@@ -19,6 +19,13 @@ module Api
 
         render json: { errors: errors }, status: status
       end
+
+      def render_bad_request
+        render_errors(
+          details: [I18n.t('api.errors.bad_request')],
+          status: :bad_request
+        )
+      end
     end
   end
 end
