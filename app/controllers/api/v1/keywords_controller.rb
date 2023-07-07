@@ -31,9 +31,10 @@ module Api
       private
 
       def filtered_keywords
-        keywords_query = KeywordsQuery.new(Keyword, filter_params)
+        keyword_params = KeywordParams.new(filter_params)
+        keywords_query = KeywordsQuery.new(Keyword, keyword_params&.filter)
         pagination, keywords = paginated_authorized(keywords_query.call)
-        keyword_presenters = keywords.map { |item| KeywordPresenter.new(item, filter_params) }
+        keyword_presenters = keywords.map { |item| KeywordPresenter.new(item, keyword_params&.filter) }
 
         render json: KeywordSerializer.new(keyword_presenters, meta: meta_from_pagination(pagination))
       end
