@@ -1,43 +1,41 @@
 # frozen_string_literal: true
 
 class KeywordsQuery
-  attr_reader :scope, :filter_params
-
   def initialize(scope, filter_params)
     @scope = scope
-    @filter_params = filter_params
+    @filter = filter_params
   end
 
   def call
-    return filter_ads_top_urls if filter_params[:adwords_url_contains]
-
-    return filter_result_urls if filter_params[:word] && filter_params[:match_at_least]
-
-    scope
-  rescue NoMethodError
-    scope
+      filter_urls
   end
 
   private
 
+  attr_reader :scope, :filter
+  attr_accessor :keywords
+
+  def filter_urls
+    return scope unless filter
+
+    @keywords = scope
+
+    @keywords = filter_ads_top_urls if filter[:adwords_url_contains].present?
+    @keywords = filter_result_urls if filter[:result_url_contains].present?
+    @keywords = filter_match_at_least if filter[:word].present? && filter[:match_at_least].present?
+
+    @keywords
+  end
+
   def filter_ads_top_urls
-    word = filter_params[:adwords_url_contains]&.downcase
-
-    return scope unless word
-
-    scope.where("array_to_string(ads_top_urls, '||') ILIKE ?", "%#{word}%")
+    keywords.where("array_to_string(ads_top_urls, '||') ILIKE ?", "%#{filter[:adwords_url_contains]}%")
   end
 
   def filter_result_urls
-    word = filter_params[:word]
-    number_of_matches = filter_params[:match_at_least]
+    keywords.where("array_to_string(result_urls, '||') ILIKE ?", "%#{filter[:result_url_contains]}%")
+  end
 
-    return scope if word.blank? || number_of_matches.blank?
-
-    sub_query = Keyword.select('sub_table.id, sub_table.user_id')
-                       .from(Keyword.select('id, user_id, unnest(result_urls) as result_url'), 'sub_table')
-                       .where('result_url ~* ?', "(#{word}.*){#{number_of_matches},}")
-
-    Keyword.joins("INNER JOIN (#{sub_query.to_sql}) sub_table ON keywords.id = sub_table.id").group(:id)
+  def filter_match_at_least
+    keywords.where("array_to_string(result_urls, '||') ~* ?", "(#{filter[:word]}.*){#{filter[:match_at_least]},}")
   end
 end
