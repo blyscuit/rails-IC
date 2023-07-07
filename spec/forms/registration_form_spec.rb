@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'fixtures/fakes/o_auth_fake'
 
 RSpec.describe RegistrationForm do
   describe '#save' do
