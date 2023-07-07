@@ -10,7 +10,6 @@ require 'pundit/rspec'
 require 'webmock/rspec'
 
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
-Dir[Rails.root.join('spec', 'lib', '**', '*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.include OAuthHelpers
