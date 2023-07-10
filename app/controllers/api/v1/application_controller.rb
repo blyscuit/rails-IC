@@ -36,8 +36,8 @@ module Api
 
       def pagination_params
         {
-          page: params[:page],
-          items: params[:per_page]
+          page: params[:page] || Pagy::DEFAULT[:page],
+          items: params[:per_page] || Pagy::DEFAULT[:items]
         }
       end
 

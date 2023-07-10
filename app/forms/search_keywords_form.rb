@@ -12,8 +12,6 @@ class SearchKeywordsForm < ApplicationForm
   # rubocop:enable Lint/MissingSuper
 
   def search_keywords
-    pagination_params[:page] ||= 1
-    pagination_params[:items] ||= 10
     return empty_pagination unless search_params[:adwords_url_contains]
 
     keywords_has_ads_top_urls_contains_word
@@ -29,8 +27,7 @@ class SearchKeywordsForm < ApplicationForm
   end
 
   def filter_unmatched_adword_urls(keyword, word_params)
-    unfiltered_urls = keyword.ads_top_urls
-    keyword.ads_top_urls = unfiltered_urls.select { |item| item.downcase.include?(word_params.downcase) }
+    keyword.ads_top_urls.select! { |item| item.downcase.include?(word_params.downcase) }
     keyword
   end
 

@@ -9,14 +9,14 @@ class KeywordsQuery
   end
 
   def call
-    return nil unless filter_params[:adwords_url_contains]
+    return unless filter_params[:adwords_url_contains]
 
     get_keywords_has_ads_top_urls_contains_word(filter_params[:adwords_url_contains])
   end
 
   private
 
-  def get_keywords_has_ads_top_urls_contains_word(word_params)
-    keywords.where("array_to_string(ads_top_urls, '||') ILIKE ?", "%#{word_params}%")
+  def get_keywords_has_ads_top_urls_contains_word(word)
+    keywords.where("array_to_string(ads_top_urls, '||') ILIKE ?", "%#{word}%")
   end
 end
