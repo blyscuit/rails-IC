@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       end
       resources :keywords, only: [:index, :create, :show]
       resources :registrations, only: [:create]
-      resources :search_results, only: [:index]
+      resources :search_keywords, only: [:index]
       resources :tokens, only: [:create]
     end
   end
