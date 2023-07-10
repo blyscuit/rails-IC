@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SearchKeywordsForm, type: :form do
   describe '#seach_keywords' do
-    context 'given user does not have keyword' do
+    context 'given a user does not have keyword' do
       it 'returns an empty array' do
         Fabricate(:keyword)
         user = Fabricate(:user)
@@ -16,8 +16,8 @@ RSpec.describe SearchKeywordsForm, type: :form do
       end
     end
 
-    context 'when user has keyword' do
-      context 'when there are urls contain the word vpn' do
+    context 'given a user has keyword' do
+      context 'given there are urls contain the word vpn' do
         it 'returns 2 keywords' do
           user = Fabricate(:user)
           ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
