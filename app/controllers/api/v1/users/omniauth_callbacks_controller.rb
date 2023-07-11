@@ -16,7 +16,7 @@ module Api
           return render_success if @user.persisted?
 
           render_errors(
-            details: @user.errors.full_messages,
+            details: user.errors.full_messages,
             status: :unprocessable_entity
           )
         end
@@ -30,6 +30,8 @@ module Api
 
         private
 
+        attr_reader :user
+
         def client_application
           state = JSON.parse(request.env['action_dispatch.request.parameters']['state'])
           app_client_id = state['client_id']
@@ -38,7 +40,6 @@ module Api
         end
 
         def render_success
-          user = @user
           access_token = Doorkeeper::AccessToken.create(
             resource_owner_id: user.id,
             application_id: client_application.id,
