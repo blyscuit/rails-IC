@@ -9,7 +9,7 @@ RSpec.describe KeywordsQuery, type: :query do
         Fabricate(:keyword)
         user = Fabricate(:user)
         filter_params = { adwords_url_contains: 'vpn' }
-        keywords = described_class.new(user.keywords, filter_params).call
+        keywords = described_class.new(user, filter_params).call
 
         expect(keywords).to be_empty
       end
@@ -22,7 +22,7 @@ RSpec.describe KeywordsQuery, type: :query do
           ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'vpn' }
-          keywords = described_class.new(user.keywords, filter_params).call
+          keywords = described_class.new(user, filter_params).call
 
           expect(keywords.count).to eq 2
         end
@@ -34,7 +34,7 @@ RSpec.describe KeywordsQuery, type: :query do
           ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'apple' }
-          keywords = described_class.new(user.keywords, filter_params).call
+          keywords = described_class.new(user, filter_params).call
 
           expect(keywords).to be_empty
         end

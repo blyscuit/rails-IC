@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class KeywordsQuery
-  attr_reader :keywords, :filter_params
+  attr_reader :current_user, :filter_params
 
-  def initialize(keywords, filter_params)
-    @keywords = keywords
+  def initialize(current_user, filter_params)
+    @current_user = current_user
     @filter_params = filter_params
   end
 
@@ -17,6 +17,6 @@ class KeywordsQuery
   private
 
   def get_keywords_has_ads_top_urls_contains_word(word)
-    keywords.where("array_to_string(ads_top_urls, '||') ILIKE ?", "%#{word}%")
+    current_user.keywords.where("array_to_string(ads_top_urls, '||') ILIKE ?", "%#{word}%")
   end
 end

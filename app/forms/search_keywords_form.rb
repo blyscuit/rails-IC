@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class SearchKeywordsForm < ApplicationForm
-  attr_reader :keywords, :search_params, :pagination_params
+  attr_reader :current_user, :search_params, :pagination_params
 
   # rubocop:disable Lint/MissingSuper
-  def initialize(keywords, search_params, pagination_params)
-    @keywords = keywords
+  def initialize(current_user, search_params, pagination_params)
+    @current_user = current_user
     @search_params = search_params
     @pagination_params = pagination_params
   end
@@ -39,6 +39,6 @@ class SearchKeywordsForm < ApplicationForm
   end
 
   def keywords_query
-    @keywords_query ||= KeywordsQuery.new(keywords, search_params)
+    @keywords_query ||= KeywordsQuery.new(current_user, search_params)
   end
 end
