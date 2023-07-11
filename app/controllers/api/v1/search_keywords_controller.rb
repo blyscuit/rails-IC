@@ -14,7 +14,7 @@ module Api
       private
 
       def search_keywords_form
-        @search_keywords_form ||= SearchKeywordsForm.new(current_user.keywords, search_params, pagination_params)
+        @search_keywords_form ||= SearchKeywordsForm.new(current_user, search_params, pagination_params)
       end
 
       def authorize!
