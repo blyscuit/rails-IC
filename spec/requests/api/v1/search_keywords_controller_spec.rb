@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'byebug'
 require 'rails_helper'
 
 RSpec.describe Api::V1::SearchKeywordsController, type: :request do
