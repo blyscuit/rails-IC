@@ -10,7 +10,7 @@ RSpec.describe SearchKeywordsForm, type: :form do
         user = Fabricate(:user)
         filter_params = { adwords_url_contains: 'vpn' }
         pagination_params = { page: 1, items: 2 }
-        _pagination, keywords = described_class.new(user.keywords, filter_params, pagination_params).search_keywords
+        _pagination, keywords = described_class.new(user, filter_params, pagination_params).search_keywords
 
         expect(keywords).to be_empty
       end
@@ -24,7 +24,7 @@ RSpec.describe SearchKeywordsForm, type: :form do
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'vpn' }
           pagination_params = { page: 1, items: 2 }
-          _pagination, keywords = described_class.new(user.keywords, filter_params, pagination_params).search_keywords
+          _pagination, keywords = described_class.new(user, filter_params, pagination_params).search_keywords
 
           expect(keywords.count).to eq 2
         end
@@ -35,7 +35,7 @@ RSpec.describe SearchKeywordsForm, type: :form do
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'vpn' }
           pagination_params = { page: 1, items: 2 }
-          pagination, _keywords = described_class.new(user.keywords, filter_params, pagination_params).search_keywords
+          pagination, _keywords = described_class.new(user, filter_params, pagination_params).search_keywords
 
           expect(pagination.page).to eq 1
           expect(pagination.items).to eq 2
@@ -50,7 +50,7 @@ RSpec.describe SearchKeywordsForm, type: :form do
           Fabricate(:keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'vpn' }
           pagination_params = { page: 1, items: 2 }
-          _pagination, keywords = described_class.new(user.keywords, filter_params, pagination_params).search_keywords
+          _pagination, keywords = described_class.new(user, filter_params, pagination_params).search_keywords
 
           expect(keywords).to be_empty
         end
@@ -61,7 +61,7 @@ RSpec.describe SearchKeywordsForm, type: :form do
           Fabricate(:keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'vpn' }
           pagination_params = { page: 1, items: 2 }
-          pagination, _keywords = described_class.new(user.keywords, filter_params, pagination_params).search_keywords
+          pagination, _keywords = described_class.new(user, filter_params, pagination_params).search_keywords
 
           expect(pagination.page).to eq 1
           expect(pagination.items).to eq 2
