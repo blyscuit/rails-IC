@@ -20,7 +20,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
         post "#{api_v1_user_google_oauth2_omniauth_callback_path}?state=%7B%22client_id%22%3A%22#{application.uid}k%22%7D"
 
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body)['access_token']).not_to be_nil
+        expect(JSON.parse(response.body)['access_token']).to be_present
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe Api::V1::Users::OmniauthCallbacksController, type: :request do
       end
     end
 
-    context 'when Doorkeeper:Application is missing' do
+    context 'when the state[:client_id] param is NOT a valid Doorkeeper::Application' do
       it 'returns bad_request error' do
         OmniAuth.config.test_mode = true
         OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
