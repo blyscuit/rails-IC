@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 2023_06_28_062200) do
     t.datetime "confirmed_at", precision: 6
     t.datetime "confirmation_sent_at", precision: 6
     t.string "unconfirmed_email"
-    t.string "provider", default: "email"
+    t.string "provider"
     t.string "uid"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

@@ -18,7 +18,7 @@ Devise.setup do |config|
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
-  # config.parent_controller = 'DeviseController'
+  config.parent_controller = 'ActionController::Base'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -274,7 +274,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :google_oauth2, Rails.application.credentials.dig(:google_oauth, :client_id), Rails.application.credentials.dig(:google_oauth, :client_secret), {
     scope: 'email', 
-    redirect_uri: Rails.application.credentials.dig(:google_oauth, :redirect_uri),
+    redirect_uri: ENV.fetch('GOOGLE_OAUTH_REDIRECT_URL'),
     provider_ignores_state: true
   }
 
@@ -316,3 +316,7 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 end
+
+# This is safe as API only.
+# When converting this app to a FullStack, remove this line and allow OAuth only from Frontend
+ActionController::Base.allow_forgery_protection = false
