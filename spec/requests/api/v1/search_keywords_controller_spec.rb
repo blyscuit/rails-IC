@@ -27,7 +27,7 @@ RSpec.describe Api::V1::SearchKeywordsController, type: :request do
             get api_v1_search_keywords_path, params: params, headers: create_token_header(user)
 
             response_body = JSON.parse(response.body, symbolize_names: true)
-            expect(response_body[:data][0][:attributes][:ads_top_urls]).to eq(['https://www.thetopvpn.com', 'https://www.nordvpn.com'])
+            expect(response_body[:data][0][:attributes][:matching_adword_urls]).to eq(['https://www.thetopvpn.com', 'https://www.nordvpn.com'])
           end
 
           it 'returns metadata with page = 1, per_page = 1 and total_item = 1' do

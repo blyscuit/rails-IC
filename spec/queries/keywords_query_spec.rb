@@ -4,17 +4,6 @@ require 'rails_helper'
 
 RSpec.describe KeywordsQuery, type: :query do
   describe '#call' do
-    context 'given user does not have keyword' do
-      it 'returns an empty array' do
-        Fabricate(:keyword)
-        user = Fabricate(:user)
-        filter_params = { adwords_url_contains: 'vpn' }
-        keywords = described_class.new(user, filter_params).call
-
-        expect(keywords).to be_empty
-      end
-    end
-
     context 'given user has keyword' do
       context 'given ads_top_urls contain a word vpn' do
         it 'returns 2 keywords' do
@@ -22,7 +11,7 @@ RSpec.describe KeywordsQuery, type: :query do
           ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'vpn' }
-          keywords = described_class.new(user, filter_params).call
+          keywords = described_class.new(Keyword, filter_params).call
 
           expect(keywords.count).to eq 2
         end
@@ -34,7 +23,7 @@ RSpec.describe KeywordsQuery, type: :query do
           ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls, user: user)
           filter_params = { adwords_url_contains: 'apple' }
-          keywords = described_class.new(user, filter_params).call
+          keywords = described_class.new(Keyword, filter_params).call
 
           expect(keywords).to be_empty
         end
