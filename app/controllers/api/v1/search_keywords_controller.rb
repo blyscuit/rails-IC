@@ -6,16 +6,14 @@ module Api
       before_action :authorize!
 
       def index
-        pagination, keywords = search_keywords_form.search_keywords
+        keywords_query = KeywordsQuery.new(Keyword, search_params)
+        pagination, keywords = paginated_authorized(keywords_query.call)
+        keyword_presenters = keywords.map { |item| KeywordPresenter.new(item, search_params) }
 
-        render json: KeywordSerializer.new(keywords, meta: meta_from_pagination(pagination))
+        render json: KeywordSerializer.new(keyword_presenters, meta: meta_from_pagination(pagination))
       end
 
       private
-
-      def search_keywords_form
-        @search_keywords_form ||= SearchKeywordsForm.new(current_user, search_params, pagination_params)
-      end
 
       def authorize!
         authorize :keyword
