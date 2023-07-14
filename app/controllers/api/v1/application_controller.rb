@@ -15,7 +15,7 @@ module Api
       private
 
       def handle_parameter_missing(exception)
-        render json: { error: exception.message }, status: :bad_request
+        render_errors(details: [exception.message], status: :bad_request)
       end
 
       def current_user

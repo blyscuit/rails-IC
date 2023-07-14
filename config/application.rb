@@ -6,7 +6,7 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module GoogleSearchRub
+module GoogleSearchRuby
   class Application < Rails::Application
     # eg: AVAILABLE_LOCALES = 'en,th'
     config.i18n.available_locales = ENV.fetch('AVAILABLE_LOCALES').split(',')
