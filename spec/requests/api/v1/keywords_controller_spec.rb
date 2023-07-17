@@ -18,7 +18,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
             expect(response).to have_http_status(:success)
           end
 
-          it 'returns three items' do
+          it 'returns 3 items' do
             user = Fabricate(:user)
             Fabricate.times(3, :keyword, user: user)
 
@@ -54,7 +54,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
             get api_v1_keywords_path, headers: create_token_header
 
             response_body = JSON.parse(response.body, symbolize_names: true)
-            expect(response_body[:data].count).to eq 0
+            expect(response_body[:data]).to be_empty
           end
 
           it 'returns metadata with page = 1, per_page = 2 and total_items = 0' do

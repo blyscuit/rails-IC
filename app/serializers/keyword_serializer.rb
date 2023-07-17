@@ -7,6 +7,6 @@ class KeywordSerializer < ApplicationSerializer
              :ads_top_urls
 
   attribute :matching_adword_urls, if: proc { |record|
-    defined?(record.matching_adword_urls)
+    defined?(record.matching_adword_urls) && record.matching_adword_urls.present?
   }
 end

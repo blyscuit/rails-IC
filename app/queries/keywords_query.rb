@@ -9,7 +9,7 @@ class KeywordsQuery
   end
 
   def call
-    return unless filter_params[:adwords_url_contains]
+    return scope unless defined?(filter_params[:adwords_url_contains]) && filter_params[:adwords_url_contains]
 
     filter_ads_top_urls(filter_params[:adwords_url_contains])
   end
