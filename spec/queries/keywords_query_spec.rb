@@ -38,6 +38,30 @@ RSpec.describe KeywordsQuery, type: :query do
           expect(keywords.count).to eq 2
         end
       end
+
+      context 'given the user search for a word vpn and match at least 1' do
+        it 'test' do
+          user = Fabricate(:user)
+          result_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
+          keyword = Fabricate(:keyword, result_urls: result_urls, user: user)
+          filter_params = { word: 'vpn', match_at_least: '1' }
+          keywords = described_class.new(Keyword, filter_params).call
+
+          expect(keywords).to eq [keyword]
+        end
+      end
+
+      context 'given the user search for vpn word e and match at least 2' do
+        it 'test' do
+          user = Fabricate(:user)
+          result_urls = ['https://www.topvpn.com/vpn', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
+          keyword = Fabricate(:keyword, result_urls: result_urls, user: user)
+          filter_params = { word: 'vpn', match_at_least: '2' }
+          keywords = described_class.new(Keyword, filter_params).call
+
+          expect(keywords).to eq [keyword]
+        end
+      end
     end
   end
 end
