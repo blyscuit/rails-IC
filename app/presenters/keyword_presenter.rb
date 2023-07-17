@@ -9,7 +9,7 @@ class KeywordPresenter
   end
 
   def matching_adword_urls
-    return unless filter_params[:adwords_url_contains]
+    return unless defined?(filter_params[:adwords_url_contains]) && filter_params[:adwords_url_contains]
 
     keyword.ads_top_urls.select { |item| item.downcase.include?(filter_params[:adwords_url_contains].downcase) }
   end
