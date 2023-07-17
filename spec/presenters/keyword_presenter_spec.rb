@@ -36,5 +36,16 @@ RSpec.describe KeywordPresenter do
         expect(result).to be_nil
       end
     end
+
+    context 'given result urls contain a word vpn' do
+      it 'returns matching_result_urls with 2 urls https://www.topvpn.com and https://www.nordvpn.com' do
+        result_urls = ['https://www.topvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
+        keyword = Fabricate(:keyword, result_urls: result_urls)
+        filter_params = { word: 'vpn', match_at_least: '1' }
+        result = described_class.new(keyword, filter_params).matching_result_urls
+
+        expect(result).to eq(['https://www.topvpn.com', 'https://www.nordvpn.com'])
+      end
+    end
   end
 end
