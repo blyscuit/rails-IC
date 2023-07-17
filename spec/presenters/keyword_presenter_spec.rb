@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe KeywordPresenter do
-  describe '#keyword' do
+  describe '#matching_adword_urls' do
     context 'given the urls contain the keyword vpn' do
       it 'has matching_adword_urls with 2 urls https://www.thetopvpn.com and https://www.nordvpn.com' do
         ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
@@ -16,7 +16,7 @@ RSpec.describe KeywordPresenter do
     end
 
     context 'given the urls do not contain the keyword vpn' do
-      it 'returns matching_adword_urls as empty array' do
+      it 'is empty' do
         ads_top_urls = ['https://www.google.com', 'https://www.bing.com', 'https://www.vnexpress.net']
         keyword = Fabricate(:keyword, ads_top_urls: ads_top_urls)
         filter_params = { adwords_url_contains: 'vpn' }
