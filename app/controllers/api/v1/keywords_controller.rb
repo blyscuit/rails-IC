@@ -6,11 +6,7 @@ module Api
       before_action :authorize!
 
       def index
-        if filter_params.present?
-          matching_adswords_urls
-        else
-          all_keywords
-        end
+        filtered_keywords
       end
 
       def create
@@ -34,18 +30,12 @@ module Api
 
       private
 
-      def matching_adswords_urls
+      def filtered_keywords
         keywords_query = KeywordsQuery.new(Keyword, filter_params)
         pagination, keywords = paginated_authorized(keywords_query.call)
         keyword_presenters = keywords.map { |item| KeywordPresenter.new(item, filter_params) }
 
         render json: KeywordSerializer.new(keyword_presenters, meta: meta_from_pagination(pagination))
-      end
-
-      def all_keywords
-        pagination, keywords = paginated_authorized(Keyword)
-
-        render json: KeywordSerializer.new(keywords, meta: meta_from_pagination(pagination))
       end
 
       def authorize!
