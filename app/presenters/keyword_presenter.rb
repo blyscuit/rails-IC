@@ -9,19 +9,23 @@ class KeywordPresenter
   end
 
   def matching_adword_urls
-    return unless defined?(filter_params[:adwords_url_contains]) && filter_params[:adwords_url_contains]
+    return unless filter_params[:adwords_url_contains]
 
-    keyword.ads_top_urls.select { |item| item.downcase.include?(filter_params[:adwords_url_contains].downcase) }
+    adwords_url_contains = filter_params[:adwords_url_contains].downcase
+    keyword.ads_top_urls.select do |item|
+      item.downcase.include?(adwords_url_contains)
+    end
   rescue NoMethodError
     nil
   end
 
   def matching_result_urls
-    return unless filter_params[:word] && filter_params[:match_at_least]
+    return if filter_params[:word].blank? || filter_params[:match_at_least].blank?
 
-    keyword.result_urls.select { |item|
-      item.downcase.match("\\w*(#{filter_params[:word]}.*){#{filter_params[:match_at_least]},}")
-    }
+    word = filter_params[:word].downcase
+    keyword.result_urls.select do |item|
+      item.downcase.match("\\w*(#{word}.*){#{filter_params[:match_at_least]},}")
+    end
   rescue NoMethodError
     nil
   end
