@@ -32,14 +32,14 @@ class KeywordParams < ApplicationParams
   end
 
   def url_filter
-    { 
+    {
       adwords_url_contains: adwords_url_contains,
       result_url_contains: result_url_contains
     }.compact
   end
 
   def match_at_least_filter
-    { 
+    {
       word: word,
       match_at_least: match_at_least
     }.compact
