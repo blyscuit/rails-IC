@@ -7,7 +7,7 @@ class KeywordsQuery
   end
 
   def call
-      filter_urls
+    filter_urls
   end
 
   private
