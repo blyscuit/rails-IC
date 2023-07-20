@@ -22,52 +22,50 @@ RSpec.describe KeywordsQuery, type: :query do
           Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls)
           filter_params = { adwords_url_contains: 'apple' }
           keywords = described_class.new(Keyword, filter_params).call
-          
+
           expect(keywords).to be_empty
         end
       end
     end
 
     context 'when querying with adwords_url_contains' do
-      context 'when user has keyword' do
-        context 'given filter_params is nil' do
-          it 'returns Keyword scope' do
-            keywords = described_class.new(Keyword, nil).call
-  
-            expect(keywords).to eq Keyword
-          end
+      context 'given filter_params is nil' do
+        it 'returns Keyword scope' do
+          keywords = described_class.new(Keyword, nil).call
+
+          expect(keywords).to eq Keyword
         end
+      end
 
-        context 'when querying with no parameters' do
-          it 'returns Keyword scope' do
-            keywords = described_class.new(Keyword, {}).call
-  
-            expect(keywords).to eq Keyword
-          end
+      context 'when querying with no parameters' do
+        it 'returns Keyword scope' do
+          keywords = described_class.new(Keyword, {}).call
+
+          expect(keywords).to eq Keyword
         end
-        
-        context 'when there are urls containing the word vpn' do
-          it 'returns 2 keywords' do
-            ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
-            Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls)
+      end
 
-            filter_params = { adwords_url_contains: 'vpn' }
-            keywords = described_class.new(Keyword, filter_params).call
+      context 'when there are urls containing the word vpn' do
+        it 'returns 2 keywords' do
+          ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
+          Fabricate.times(2, :keyword, ads_top_urls: ads_top_urls)
 
-            expect(keywords.count).to eq 2
-          end
+          filter_params = { adwords_url_contains: 'vpn' }
+          keywords = described_class.new(Keyword, filter_params).call
+
+          expect(keywords.count).to eq 2
         end
+      end
 
-        context 'when there is no urls containing the word vpn' do
-          it 'returns empty array for keywords' do
-            ads_top_urls = ['https://www.thetop.com', 'https://www.nord.com', 'https://www.vnexpress.net']
-            Fabricate(:keyword, ads_top_urls: ads_top_urls)
+      context 'when there is no urls containing the word vpn' do
+        it 'returns empty array for keywords' do
+          ads_top_urls = ['https://www.thetop.com', 'https://www.nord.com', 'https://www.vnexpress.net']
+          Fabricate(:keyword, ads_top_urls: ads_top_urls)
 
-            filter_params = { adwords_url_contains: 'vpn' }
-            keywords = described_class.new(Keyword, filter_params).call
+          filter_params = { adwords_url_contains: 'vpn' }
+          keywords = described_class.new(Keyword, filter_params).call
 
-            expect(keywords).to be_empty
-          end
+          expect(keywords).to be_empty
         end
       end
     end
