@@ -22,13 +22,10 @@ class KeywordParams < ApplicationParams
     @word = handle_param(:word)
     @match_at_least = handle_param(:match_at_least)
 
-    if adwords_url_contains || result_url_contains
-      url_filter
-    elsif word && match_at_least
-      match_at_least_filter
-    else
-      no_filter
-    end
+    return url_filter if adwords_url_contains || result_url_contains
+    return match_at_least_filter if word && match_at_least
+
+    no_filter
   end
 
   def url_filter
