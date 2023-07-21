@@ -97,7 +97,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
           end
 
           context 'given there are adword urls contain the keyword VPN' do
-            it 'returns 2 keywords contains the matched urls' do
+            it 'returns 2 keywords containing the matched urls' do
               user = Fabricate(:user)
               ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
               Fabricate(:keyword, ads_top_urls: ads_top_urls, user: user)
@@ -343,7 +343,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
       context 'when searching for a specific keyword in result urls' do
         context 'given there are 2 keywords with result urls contain the keyword vpn' do
-          it 'returns 2 keywords contains the matched urls' do
+          it 'returns 2 keywords containing the matched urls' do
             user = Fabricate(:user)
             result_urls = ['https://www.thetopvpn.com']
             Fabricate.times(2, :keyword, result_urls: result_urls, user: user)
@@ -371,7 +371,7 @@ RSpec.describe Api::V1::KeywordsController, type: :request do
 
       context 'when searching for a specific keyword with adwords_url VPN and result_url game' do
         context 'given there are 2 keywords with adwords_url containing VPN and result_url containing the keyword game' do
-          it 'returns 2 keywords contains the matched urls' do
+          it 'returns 2 keywords containing the matched urls' do
             user = Fabricate(:user)
             ads_top_urls = ['https://www.thetopvpn.com']
             result_urls = ['https://www.game.com']

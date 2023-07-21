@@ -11,6 +11,7 @@ class ApplicationParams
 
   def handle_param(param_name)
     param_value = params&.dig(param_name)
+
     return if param_value.blank?
 
     param_value
