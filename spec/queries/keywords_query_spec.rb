@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe KeywordsQuery, type: :query do
   describe '#call' do
-    context 'given the user searchs for ads_top_urls' do
+    context 'given the user searches for ads_top_urls' do
       context 'given ads_top_urls contain the filtering word vpn' do
         it 'returns 2 keywords' do
           ads_top_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
@@ -28,15 +28,15 @@ RSpec.describe KeywordsQuery, type: :query do
       end
 
       context 'given filter_params is nil' do
-        it 'returns Keyword scope' do
+        it 'returns all the Keywords' do
           keywords = described_class.new(Keyword, nil).call
 
-          expect(keywords).to eq Keyword
+          expect(keywords.all).to eq Keyword.all
         end
       end
     end
 
-    context 'given the user searchs for result_urls' do
+    context 'given the user searches for result_urls' do
       context 'given filtering with a word vpn and match at least 1' do
         it 'returns a keyword' do
           result_urls = ['https://www.thetopvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
@@ -60,7 +60,7 @@ RSpec.describe KeywordsQuery, type: :query do
       end
 
       context 'given there is no matched result' do
-        it 'returns empty' do
+        it 'is empty' do
           result_urls = ['https://www.topvpn.com', 'https://www.nordvpn.com', 'https://www.vnexpress.net']
           Fabricate(:keyword, result_urls: result_urls)
           filter_params = { word: 'vpn', match_at_least: '2' }
@@ -75,7 +75,7 @@ RSpec.describe KeywordsQuery, type: :query do
           filter_params = { word: 'vpn' }
           keywords = described_class.new(Keyword, filter_params).call
 
-          expect(keywords).to eq Keyword
+          expect(keywords.all).to eq Keyword.all
         end
       end
 
